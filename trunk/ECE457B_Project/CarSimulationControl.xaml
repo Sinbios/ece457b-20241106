@@ -1,0 +1,224 @@
+﻿<UserControl x:Class="ECE457B_Project.CarSimulationControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="500">
+    <Grid>
+        <Canvas>
+            <Rectangle Name="SkyRectangle"
+                    Stroke="Black"
+                    StrokeThickness="1"
+                    Fill="SkyBlue"
+                    Width="500"
+                    Height="300"/>                    
+            <Rectangle Name="GrassRectangle"
+                       Stroke="Black"
+                       StrokeThickness="1"
+                       Fill="Green"
+                       Width="500"
+                       Height="200"
+                       Canvas.Top="100"/>                       
+            <Rectangle Name="RoadRectangle"
+                       Stroke="Black"
+                       StrokeThickness="1"
+                       Fill="LightGray"
+                       Width="500"
+                       Height="80"
+                       Canvas.Top="110"/>
+            
+            <Rectangle Name="MileMarkerPost"
+                       Stroke="Black"
+                       Fill="Silver"
+                       Width="10"
+                       Height="60"
+                       Canvas.Bottom="195"
+                       Canvas.Left="50"/>
+            <Rectangle Name="MileMarkerSign"
+                       Stroke="Black"
+                       Fill="MediumSeaGreen"
+                       Width="20"
+                       Height="30"
+                       Canvas.Bottom="230"
+                       Canvas.Left="45"/>
+            <Rectangle Name="MileMarkerSignText"
+                       Stroke="Black"
+                       Fill="White"
+                       Width="10"
+                       Height="7"
+                       Canvas.Bottom="245"
+                        Canvas.Left="50"/>
+
+            <Rectangle Name="MileMarkerPost2"
+                       Stroke="Black"
+                       Fill="Silver"
+                       Width="10"
+                       Height="60"
+                       Canvas.Bottom="195"
+                       Canvas.Left="350"/>
+            <Rectangle Name="MileMarkerSign2"
+                       Stroke="Black"
+                       Fill="MediumSeaGreen"
+                       Width="20"
+                       Height="30"
+                       Canvas.Bottom="230"
+                       Canvas.Left="345"/>
+            <Rectangle Name="MileMarkerSignText2"
+                       Stroke="Black"
+                       Fill="White"
+                       Width="10"
+                       Height="7"
+                       Canvas.Bottom="245"
+                        Canvas.Left="350"/>
+
+            <Rectangle Name="RoadLineRectangle"
+                       Stroke="Black"
+                       StrokeThickness="1"
+                       Fill="White"
+                       Width="30"
+                       Height="10"
+                       Canvas.Top="145"
+                       Canvas.Left="0">
+                <Rectangle.RenderTransform>
+                    <SkewTransform CenterX="0" CenterY="0" AngleX="-20" AngleY="0"/>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+            <Rectangle Name="RoadLineRectangle2"
+                       Stroke="Black"
+                       StrokeThickness="1"
+                       Fill="White"
+                       Width="30"
+                       Height="10"
+                       Canvas.Top="145"
+                       Canvas.Left="100">
+                <Rectangle.RenderTransform>
+                    <SkewTransform CenterX="0" CenterY="0" AngleX="-20" AngleY="0"/>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+            <Rectangle Name="RoadLineRectangle3"
+                       Stroke="Black"
+                       StrokeThickness="1"
+                       Fill="White"
+                       Width="30"
+                       Height="10"
+                       Canvas.Top="145"
+                       Canvas.Left="200">
+                <Rectangle.RenderTransform>
+                    <SkewTransform CenterX="0" CenterY="0" AngleX="-20" AngleY="0"/>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+            <Rectangle Name="RoadLineRectangle4"
+                    Stroke="Black"
+                    StrokeThickness="1"
+                    Fill="White"
+                    Width="30"
+                    Height="10"
+                    Canvas.Top="145"
+                    Canvas.Left="300">
+                <Rectangle.RenderTransform>
+                    <SkewTransform CenterX="0" CenterY="0" AngleX="-20" AngleY="0"/>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+            <Rectangle Name="RoadLineRectangle5"
+                       Stroke="Black"
+                       StrokeThickness="1"
+                       Fill="White"
+                       Width="30"
+                       Height="10"
+                       Canvas.Top="145"
+                       Canvas.Left="400">
+                <Rectangle.RenderTransform>
+                    <SkewTransform CenterX="0" CenterY="0" AngleX="-20" AngleY="0"/>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+            
+            <Ellipse Name="CarBackWheel"
+                     Stroke="Black"
+                     StrokeThickness="1"
+                     Fill="Black"
+                     Width="25"
+                     Height="25"
+                     Canvas.Left="75"
+                     Canvas.Bottom="140"/>
+            <Ellipse Name="CarBackWheelHubCap"
+                     Stroke="Black"
+                     StrokeThickness="1"
+                     Fill="Silver"
+                     Width="15"
+                     Height="15"
+                     Canvas.Left="80"
+                     Canvas.Bottom="145"/>
+            <Ellipse Name="CarFrontWheel"
+                     Stroke="Black"
+                     StrokeThickness="1"
+                     Fill="Black"
+                     Width="25"
+                     Height="25"
+                     Canvas.Left="145"
+                     Canvas.Bottom="140"/>
+            <Ellipse Name="CarFrontWheelHubCap"
+                     Stroke="Black"
+                     StrokeThickness="1"
+                     Fill="Silver"
+                     Width="15"
+                     Height="15"
+                     Canvas.Left="150"
+                     Canvas.Bottom="145"/>
+            
+            <Rectangle Name="CarLowerBody"
+                       Stroke="Red"
+                       StrokeThickness="1"
+                       Fill="Red"
+                       Width="145"
+                       Height="20"
+                       Canvas.Bottom="150"
+                       Canvas.Left="55"/>
+            <Rectangle Name="BackDoorHandle"
+                       Stroke="Black"
+                       Fill="Black"
+                       Width="10"
+                       Height="3"
+                       Canvas.Bottom="162"
+                       Canvas.Left="95"/>
+            <Rectangle Name="FontDoorHandle"
+                       Stroke="Black"
+                       Fill="Black"
+                       Width="10"
+                       Height="3"
+                       Canvas.Bottom="162"
+                       Canvas.Left="125"/>
+            
+            <Polygon Name="CarUpperBody1"
+                       Stroke="Red"
+                       StrokeThickness="4"
+                       Fill="Black"
+                       Canvas.Bottom="165"
+                       Canvas.Left="70"
+                       Points="22,2 22,18 2,18" Height="20" ClipToBounds="True"/>
+            <Rectangle Name="CarUpperBody2"
+                       Stroke="Red"
+                       StrokeThickness="4"
+                       Fill="Black"
+                       Width="30"
+                       Height="20"
+                       Canvas.Bottom="165"
+                       Canvas.Left="90"/>
+            <Rectangle Name="CarUpperBody3"
+                       Stroke="Red"
+                       StrokeThickness="4"
+                       Fill="Black"
+                       Width="30"
+                       Height="20"
+                       Canvas.Bottom="165"
+                       Canvas.Left="120"/>
+            <Polygon Name="CarUpperBody4"
+                       Stroke="Red"
+                       StrokeThickness="4"
+                       Fill="Black"
+                       Canvas.Bottom="165"
+                       Canvas.Left="150"
+                       Points="0,2 0,18 25,18" Height="20" ClipToBounds="True"/>
+        </Canvas>
+    </Grid>
+</UserControl>

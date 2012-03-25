@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500">
     <Grid>
-        <Canvas>
+        <Canvas Name="DrawingCanvas">
             <Rectangle Name="SkyRectangle"
                     Stroke="Black"
                     StrokeThickness="1"
@@ -46,7 +46,7 @@
                        Stroke="Black"
                        Fill="White"
                        Width="10"
-                       Height="7"
+                       Height="5"
                        Canvas.Bottom="245"
                         Canvas.Left="50"/>
 

@@ -37,7 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DotFuzzy">
-      <HintPath>..\..\..\..\..\..\Downloads\DotFuzzy-1.0-dll\DotFuzzy-1.0-DLL\DotFuzzy.dll</HintPath>
+      <HintPath>..\..\..\..\..\Desktop\DotFuzzy-1.0-dll\DotFuzzy-1.0-DLL\DotFuzzy.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

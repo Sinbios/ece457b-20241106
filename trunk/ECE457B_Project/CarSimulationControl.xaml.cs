@@ -19,34 +19,74 @@ namespace ECE457B_Project
     /// </summary>
     public partial class CarSimulationControl : UserControl
     {
-        private double PixelsPerMeter;
+        #region Static Variables
 
-        private List<UIElement[]> Cars = null;
-        private List<UIElement[]> Trees = null; //Arrays of length 2 -- one UIElement for the sign post, another for the sign
-        private List<Rectangle> RoadLines = null;
+        private static CarSimulationControl Instance;
 
-        private static double EmptyRoadLengthAtEachEndInPixels = 150;
-
-        private static double DistanceBetweenRoadLinesInMeters = 9;
-        private static double DistanceBetweenTreesInMeters = 25;
-
+        /* Environment Dimensions */
         private static double HeightOfRoadsideInPixels = 10;
-
         private static double TreeHeightInMeters = 3.5;
         private static double TreeWidthInMeters = (1.0 / 6) * TreeHeightInMeters;
         private static double TreeFoliageHeightInMeters = 0.75 * TreeHeightInMeters;
         private static double TreeFoliageWidthInMeters = (2.0 / 3) * TreeFoliageHeightInMeters;
-
-        private static double LowerCarLengthInMeters = 4.1;
-        private static double LowerCarHeightInMeters = 0.137 * LowerCarLengthInMeters;
-        private static double CarDoorLengthInMeters = 0.207 * LowerCarLengthInMeters;
-
-        private static double RoadLineLengthInMeters = (1.0 / 3) * LowerCarLengthInMeters;
-        private static double RoadLineHeightInMeters = (1.0 / 3) * RoadLineLengthInMeters;
-
         private static double RoadHeightInMeters = 6.7;
+        private static double RoadLineHeightInMeters = (1.0 / 8) * RoadHeightInMeters;
+        private static double RoadLineWidthInMeters = 3 * RoadLineHeightInMeters;
 
-        private static CarSimulationControl Instance;
+        /* Car Dimensions */
+        private static double LowerCarWidthInMeters = 1.812 * RoadHeightInMeters;
+        private static double LowerCarHeightInMeters = 0.130 * LowerCarWidthInMeters;
+        private static double UpperCarHeightInMeters = LowerCarHeightInMeters;
+        private static double CarDoorWidthInMeters = 0.18 * LowerCarWidthInMeters;
+        private static double CarRearWindshieldWidthInMeters = 0.137 * LowerCarWidthInMeters;
+        private static double CarFrontWindshieldWidthInMeters = 0.172 * LowerCarWidthInMeters;
+        private static double CarDoorHandleWidthInMeters = 0.07 * LowerCarWidthInMeters;
+        private static double CarDoorHandleHeightInMeters = 0.15 * LowerCarHeightInMeters;
+        private static double CarRearLightWidthInMeters = 0.035 * LowerCarWidthInMeters;
+        private static double CarRearLightHeightInMeters = 0.55 * LowerCarHeightInMeters;
+        private static double CarFrontLightWidthInMeters = 0.055 * LowerCarWidthInMeters;
+        private static double CarFrontLightHeightInMeters = CarRearLightHeightInMeters;
+        private static double CarTireDiameterInMeters = 1.3 * LowerCarHeightInMeters;
+        private static double CarTireLineStrokeThicknessInMeters = 0.13 * CarTireDiameterInMeters;
+        private static double CarHubCapDiameterInMeters = 0.545 * CarTireDiameterInMeters;
+        private static double CarWindowStrokeThicknessInMeters = 0.2 * UpperCarHeightInMeters;
+
+        /* Car Component Positions */
+        private static double CarBackTireDistanceFromLeftEndOfCarInMeters = 0.103 * LowerCarWidthInMeters; //Distance to the left edge of the tire, NOT the center of the tire
+        private static double CarFrontTireDistanceFromLeftEndOfCarInMeters = 0.655 * LowerCarWidthInMeters; //Distance to the left edge of the tire
+        private static double CarBackDoorDistanceFromLeftEndOfCarInMeters = 0.241 * LowerCarWidthInMeters;
+        private static double CarFrontDoorDistanceFromLeftEndOfCarInMeters = CarBackDoorDistanceFromLeftEndOfCarInMeters + CarDoorWidthInMeters;
+        private static double CarDoorHandleDistanceFromLeftEndOfDoorInMeters = 0.167 * CarDoorWidthInMeters;
+        private static double CarDoorHandleDistanceFromBottomOfLowerCarInMeters = 0.7 * LowerCarHeightInMeters;
+
+        /* Environment Component Positions */
+        private static double DistanceBetweenRoadLinesInMeters = 12;
+        private static double DistanceBetweenTreesInMeters = 25;
+        //private static double MinimumPixelsBehindLastCar = 75;
+        private static double MinimumMetersBehindLastCar = 2 * LowerCarWidthInMeters;
+        //private static double MaximumPixelsBehindLastCar = 250;
+        private static double MaximumMetersBehindLastCar = 4 * LowerCarWidthInMeters;
+        private static double EmptyRoadLengthInFrontOfPilotCarInMeters = 2 * LowerCarWidthInMeters;
+        private static double MinEmptyRoadLengthBehindLastCarInMeters = 25;
+
+        #endregion
+
+        #region Member Variables
+
+        private double PixelsPerMeter;
+
+        private double RightMostTreeXPos = 0; //The left part of the tree trunk
+        private double RightMostRoadLineXPos = 0;
+
+        private double TerrainVelocity;
+
+        private double TotalMetersInView;
+
+        private double[] CarTireRotationAnglesInDegrees;
+
+        #endregion
+
+        #region Constructor
 
         private CarSimulationControl(double width, double height)
         {
@@ -54,6 +94,22 @@ namespace ECE457B_Project
 
             this.Width = width;
             this.Height = height;
+
+            this.TerrainVelocity = 0;
+
+            this.DrawingCanvas.Children.Clear();
+        }
+
+        #endregion
+
+        #region Instance Setup Methods
+
+        public static CarSimulationControl CreateInstance(double width, double height)
+        {
+            Instance = new CarSimulationControl(width, height);
+            Instance.ClipToBounds = true;
+
+            return Instance;
         }
 
         public static CarSimulationControl GetInstance()
@@ -66,20 +122,83 @@ namespace ECE457B_Project
             return Instance;
         }
 
-        public static CarSimulationControl CreateInstance(double width, double height)
-        {
-            Instance = new CarSimulationControl(width, height);
+        #endregion
 
-            Instance.PixelsPerMeter = Instance.Width / ((3 * LowerCarLengthInMeters) + (2 * 10) /*10m between each car*/ + (2 * (20)) /*20m of space at each end*/);
-            Console.WriteLine("Pixels per meter = {0:0.00}", Instance.PixelsPerMeter);
-            Instance.DrawBackground();
+        #region Visualization Methods
 
-            return Instance;
-        }
-
-        public void DrawBackground()
+        public void InitializeVisualization(Car[] cars)
         {
             this.DrawingCanvas.Children.Clear();
+
+            double distanceBetweenFirstAndLast = this.GetDistanceBetweenFirstAndLastCar(cars);
+
+            this.TotalMetersInView = (distanceBetweenFirstAndLast + (3 * LowerCarWidthInMeters) + (EmptyRoadLengthInFrontOfPilotCarInMeters) + (2 * MinEmptyRoadLengthBehindLastCarInMeters));
+
+            this.PixelsPerMeter = Instance.Width / this.TotalMetersInView;
+
+            this.CreateBackground();
+
+            this.CarTireRotationAnglesInDegrees = new double[cars.Length];
+
+            double curCarFrontXPos = this.Width - (EmptyRoadLengthInFrontOfPilotCarInMeters * PixelsPerMeter);
+            for (int i = 0; i < cars.Length; i++)
+            {
+                this.CreateCar(curCarFrontXPos, ((2.0 / 3.0) * this.Height) - HeightOfRoadsideInPixels - ((RoadHeightInMeters * PixelsPerMeter) / 2.0));
+
+                if (i != cars.Length - 1)
+                {
+                    curCarFrontXPos -= (LowerCarWidthInMeters + (cars[i].Position - cars[i + 1].Position)) * PixelsPerMeter;
+                }
+            }
+        }  
+
+        public void UpdateUI(Car[] cars)
+        {
+            //If we have dipped below our minimum number of meters between first and last car
+            double distanceBetweenFirstAndLast = this.GetDistanceBetweenFirstAndLastCar(cars);
+
+            //double excessSpaceBehindLastCarInPixels = this.Width - ((cars.Length * LowerCarWidthInMeters * PixelsPerMeter) + (distanceBetweenFirstAndLast * PixelsPerMeter) + (EmptyRoadLengthInFrontOfPilotCarInMeters * PixelsPerMeter));
+            double excessSpaceBehindLastCarInMeters = (this.Width / PixelsPerMeter) - ((cars.Length * LowerCarWidthInMeters) + distanceBetweenFirstAndLast + EmptyRoadLengthInFrontOfPilotCarInMeters);
+            if (excessSpaceBehindLastCarInMeters <= MinimumMetersBehindLastCar)
+            {
+                if (cars[cars.Length - 1].Velocity < cars[0].Velocity)
+                {
+                    this.TotalMetersInView += (cars[0].Velocity - cars[cars.Length - 1].Velocity) * Params.timeStep;
+                }
+                else if (cars[cars.Length - 1].Velocity == cars[0].Velocity)
+                {
+                    this.TotalMetersInView += cars[0].Velocity * Params.timeStep;
+                }
+            }
+            else if (excessSpaceBehindLastCarInMeters >= MaximumMetersBehindLastCar)
+            {
+                if (cars[cars.Length - 1].Velocity > cars[0].Velocity)
+                {
+                    this.TotalMetersInView -= (cars[cars.Length - 1].Velocity - cars[0].Velocity) * Params.timeStep;
+                }
+                else if (cars[cars.Length - 1].Velocity == cars[0].Velocity)
+                {
+                    this.TotalMetersInView -= cars[0].Velocity * Params.timeStep;
+                }
+            }
+
+            this.PixelsPerMeter = Instance.Width / this.TotalMetersInView;
+   
+            this.TerrainVelocity = cars[0].Velocity;
+
+            this.RedrawVisualization(cars);
+        }
+
+        #endregion
+
+        #region Helper Methods
+
+        private void RedrawVisualization(Car[] cars)
+        {
+            //Redraw the visualization
+            this.DrawingCanvas.Children.Clear();
+
+            #region Update Environment
 
             Rectangle skyRectangle = new Rectangle();
             skyRectangle.Stroke = Brushes.Black;
@@ -107,36 +226,305 @@ namespace ECE457B_Project
             roadRectangle.SetCurrentValue(Canvas.TopProperty, this.Height - grassRectangle.Height + HeightOfRoadsideInPixels);
             this.DrawingCanvas.Children.Add(roadRectangle);
 
-            Trees = new List<UIElement[]>();
+            #endregion
+
+            #region Update Trees
+
+            double curTreeXPosition = this.RightMostTreeXPos - (this.TerrainVelocity * Params.timeStep * PixelsPerMeter);
+
+            if (curTreeXPosition - (TreeFoliageWidthInMeters * PixelsPerMeter / 2.0) + (DistanceBetweenTreesInMeters * PixelsPerMeter) <= this.Width)
+            {
+                curTreeXPosition += DistanceBetweenTreesInMeters * PixelsPerMeter;
+            }
+
+            this.RightMostTreeXPos = curTreeXPosition;
+
+            double treeYPosition = grassRectangle.Height - (HeightOfRoadsideInPixels / 2.0); //From bottom
+
+            while (curTreeXPosition + ((TreeFoliageWidthInMeters * PixelsPerMeter) / 2.0) >= 0)
+            {
+                this.CreateTree(curTreeXPosition, treeYPosition);
+                curTreeXPosition -= DistanceBetweenTreesInMeters * PixelsPerMeter;
+            }
+
+            #endregion
+
+            #region Update Road Lines
+
+            double curRoadLineXPosition = this.RightMostRoadLineXPos - (this.TerrainVelocity * Params.timeStep * PixelsPerMeter);
+
+            if (curRoadLineXPosition - (RoadLineWidthInMeters * PixelsPerMeter / 2.0) + (DistanceBetweenRoadLinesInMeters * PixelsPerMeter) <= this.Width)
+            {
+                curRoadLineXPosition += DistanceBetweenRoadLinesInMeters * PixelsPerMeter;
+            }
+
+            this.RightMostRoadLineXPos = curRoadLineXPosition;
+
+            double roadLineYPosition = grassRectangle.Height - HeightOfRoadsideInPixels - ((RoadHeightInMeters * PixelsPerMeter) / 2.0);
+
+            while (curRoadLineXPosition + ((RoadLineWidthInMeters * PixelsPerMeter) / 2.0) >= 0)
+            {
+                this.CreateRoadLine(curRoadLineXPosition, roadLineYPosition);
+
+                curRoadLineXPosition -= DistanceBetweenRoadLinesInMeters * PixelsPerMeter;
+            }
+
+            #endregion
+
+            #region Update Cars
+
+            double curCarFrontXPos = this.Width - (EmptyRoadLengthInFrontOfPilotCarInMeters * PixelsPerMeter);
+            for (int i = 0; i < cars.Length; i++)
+            {
+                this.CreateCar(curCarFrontXPos, ((2.0 / 3.0) * this.Height) - HeightOfRoadsideInPixels - ((RoadHeightInMeters * PixelsPerMeter) / 2.0), cars[i].Velocity, i);
+
+                if (i != cars.Length - 1)
+                {
+                    curCarFrontXPos -= (LowerCarWidthInMeters + (cars[i].Position - cars[i + 1].Position)) * PixelsPerMeter;
+                }
+            }
+
+            #endregion
+        }
+
+        private void CreateBackground()
+        {
+            Rectangle skyRectangle = new Rectangle();
+            skyRectangle.Stroke = Brushes.Black;
+            skyRectangle.StrokeThickness = 1;
+            skyRectangle.Fill = Brushes.SkyBlue;
+            skyRectangle.Width = this.Width;
+            skyRectangle.Height = this.Height;
+            this.DrawingCanvas.Children.Add(skyRectangle);
+
+            Rectangle grassRectangle = new Rectangle();
+            grassRectangle.Stroke = Brushes.Black;
+            grassRectangle.StrokeThickness = 1;
+            grassRectangle.Fill = Brushes.ForestGreen;
+            grassRectangle.Width = this.Width;
+            grassRectangle.Height = (2.0 / 3.0) * this.Height;
+            grassRectangle.SetCurrentValue(Canvas.BottomProperty, 0.0);
+            this.DrawingCanvas.Children.Add(grassRectangle);
+
+            Rectangle roadRectangle = new Rectangle();
+            roadRectangle.Stroke = Brushes.Black;
+            roadRectangle.StrokeThickness = 1;
+            roadRectangle.Fill = Brushes.LightGray;
+            roadRectangle.Width = this.Width;
+            roadRectangle.Height = RoadHeightInMeters * PixelsPerMeter;
+            roadRectangle.SetCurrentValue(Canvas.TopProperty, this.Height - grassRectangle.Height + HeightOfRoadsideInPixels);
+            this.DrawingCanvas.Children.Add(roadRectangle);
+
             double curTreeXPosition = this.Width - ((DistanceBetweenTreesInMeters * 0.5) * PixelsPerMeter); //From left
+            this.RightMostTreeXPos = curTreeXPosition;
+
             double treeYPosition = grassRectangle.Height - (HeightOfRoadsideInPixels / 2.0); //From bottom
 
             while (curTreeXPosition + ((TreeFoliageWidthInMeters * PixelsPerMeter) / 2.0) > 0)
             {
-                Trees.Insert(0, this.CreateTree(curTreeXPosition, treeYPosition));
+                this.CreateTree(curTreeXPosition, treeYPosition);
 
                 curTreeXPosition -= DistanceBetweenTreesInMeters * PixelsPerMeter;
             }
 
-            RoadLines = new List<Rectangle>();
             double curRoadLineXPosition = this.Width - ((DistanceBetweenRoadLinesInMeters * 0.5) * PixelsPerMeter); //From left
+            this.RightMostRoadLineXPos = curRoadLineXPosition;
+
             double roadLineYPosition = grassRectangle.Height - HeightOfRoadsideInPixels - ((RoadHeightInMeters * PixelsPerMeter) / 2.0);
 
-            while (curRoadLineXPosition + ((RoadLineLengthInMeters * PixelsPerMeter) / 2.0) > 0)
+            while (curRoadLineXPosition + ((RoadLineWidthInMeters * PixelsPerMeter) / 2.0) > 0)
             {
-                RoadLines.Insert(0, this.CreateRoadLine(curRoadLineXPosition, roadLineYPosition));
+                this.CreateRoadLine(curRoadLineXPosition, roadLineYPosition);
 
                 curRoadLineXPosition -= DistanceBetweenRoadLinesInMeters * PixelsPerMeter;
             }
         }
 
-        private Rectangle CreateRoadLine(double roadLineCenterXPos, double roadLineCenterYPos)
+        private void CreateCar(double carFrontXPos, double carLowerBodyBottomYPos, double velocity = -1, int carIndex = -1)
+        {
+            Rectangle lowerBody = new Rectangle();
+            lowerBody.Stroke = Brushes.Red;
+            lowerBody.Fill = Brushes.Red;
+            lowerBody.Width = LowerCarWidthInMeters * PixelsPerMeter;
+            lowerBody.Height = LowerCarHeightInMeters * PixelsPerMeter;
+            lowerBody.SetCurrentValue(Canvas.BottomProperty, carLowerBodyBottomYPos);
+            lowerBody.SetCurrentValue(Canvas.LeftProperty, carFrontXPos - lowerBody.Width);
+            this.DrawingCanvas.Children.Add(lowerBody);
+
+            Rectangle backDoorHandle = new Rectangle();
+            backDoorHandle.Stroke = Brushes.Black;
+            backDoorHandle.Fill = Brushes.Black;
+            backDoorHandle.Width = CarDoorHandleWidthInMeters * PixelsPerMeter;
+            backDoorHandle.Height = CarDoorHandleHeightInMeters * PixelsPerMeter;
+            backDoorHandle.SetCurrentValue(Canvas.LeftProperty, carFrontXPos - lowerBody.Width + (CarBackDoorDistanceFromLeftEndOfCarInMeters + CarDoorHandleDistanceFromLeftEndOfDoorInMeters) * PixelsPerMeter);
+            backDoorHandle.SetCurrentValue(Canvas.BottomProperty, carLowerBodyBottomYPos + (CarDoorHandleDistanceFromBottomOfLowerCarInMeters * PixelsPerMeter));
+            this.DrawingCanvas.Children.Add(backDoorHandle);
+
+            Rectangle frontDoorHandle = new Rectangle();
+            frontDoorHandle.Stroke = Brushes.Black;
+            frontDoorHandle.Fill = Brushes.Black;
+            frontDoorHandle.Width = CarDoorHandleWidthInMeters * PixelsPerMeter;
+            frontDoorHandle.Height = CarDoorHandleHeightInMeters * PixelsPerMeter;
+            frontDoorHandle.SetCurrentValue(Canvas.LeftProperty, carFrontXPos - lowerBody.Width + (CarFrontDoorDistanceFromLeftEndOfCarInMeters + CarDoorHandleDistanceFromLeftEndOfDoorInMeters) * PixelsPerMeter);
+            frontDoorHandle.SetCurrentValue(Canvas.BottomProperty, carLowerBodyBottomYPos + (CarDoorHandleDistanceFromBottomOfLowerCarInMeters * PixelsPerMeter));
+            this.DrawingCanvas.Children.Add(frontDoorHandle);
+
+            Rectangle rearLight = new Rectangle();
+            rearLight.Stroke = Brushes.Black;
+            rearLight.Fill = Brushes.Yellow;
+            rearLight.Width = CarRearLightWidthInMeters * PixelsPerMeter;
+            rearLight.Height = CarRearLightHeightInMeters * PixelsPerMeter;
+            rearLight.SetCurrentValue(Canvas.BottomProperty, carLowerBodyBottomYPos + lowerBody.Height - rearLight.Height);
+            rearLight.SetCurrentValue(Canvas.LeftProperty, carFrontXPos - lowerBody.Width);
+            this.DrawingCanvas.Children.Add(rearLight);
+
+            Rectangle frontLight = new Rectangle();
+            frontLight.Stroke = Brushes.Black;
+            frontLight.Fill = Brushes.Yellow;
+            frontLight.Width = CarFrontLightWidthInMeters * PixelsPerMeter;
+            frontLight.Height = CarFrontLightHeightInMeters * PixelsPerMeter;
+            frontLight.SetCurrentValue(Canvas.BottomProperty, carLowerBodyBottomYPos + lowerBody.Height - frontLight.Height);
+            frontLight.SetCurrentValue(Canvas.LeftProperty, carFrontXPos - frontLight.Width);
+            this.DrawingCanvas.Children.Add(frontLight);
+
+            Ellipse backTire = new Ellipse();
+            backTire.Stroke = Brushes.Black;
+            backTire.Fill = Brushes.Black;
+            backTire.Width = CarTireDiameterInMeters * PixelsPerMeter;
+            backTire.Height = CarTireDiameterInMeters * PixelsPerMeter;
+            backTire.SetCurrentValue(Canvas.BottomProperty, carLowerBodyBottomYPos - (backTire.Height / 2.0));
+            backTire.SetCurrentValue(Canvas.LeftProperty, carFrontXPos - lowerBody.Width + (CarBackTireDistanceFromLeftEndOfCarInMeters * PixelsPerMeter));
+            this.DrawingCanvas.Children.Add(backTire);
+
+            Ellipse backTireHubCap = new Ellipse();
+            backTireHubCap.Stroke = Brushes.Black;
+            backTireHubCap.Fill = Brushes.Silver;
+            backTireHubCap.Width = CarHubCapDiameterInMeters * PixelsPerMeter;
+            backTireHubCap.Height = CarHubCapDiameterInMeters * PixelsPerMeter;
+            backTireHubCap.SetCurrentValue(Canvas.BottomProperty, carLowerBodyBottomYPos - (backTireHubCap.Height / 2.0));
+            backTireHubCap.SetCurrentValue(Canvas.LeftProperty, ((double)backTire.GetValue(Canvas.LeftProperty)) + (((CarTireDiameterInMeters - CarHubCapDiameterInMeters) / 2.0) * PixelsPerMeter));
+
+            Line backTireLine = new Line();
+            backTireLine.Stroke = Brushes.White;
+            backTireLine.StrokeThickness = Math.Max(CarTireLineStrokeThicknessInMeters * PixelsPerMeter, 1);
+            backTireLine.Width = backTire.Width;
+            backTireLine.Height = backTire.Height;
+            backTireLine.SetCurrentValue(Canvas.LeftProperty, (double)backTire.GetValue(Canvas.LeftProperty));
+            backTireLine.SetCurrentValue(Canvas.BottomProperty, (double)backTire.GetValue(Canvas.BottomProperty));
+            backTireLine.X1 = backTire.Width / 2.0;
+            backTireLine.Y1 = backTire.Height / 2.0;
+            backTireLine.X2 = backTireLine.X1 + (backTire.Width / 2.0);
+            backTireLine.Y2 = backTireLine.Y1;
+
+            if (velocity != -1 && carIndex != -1)
+            {
+                double rotationDueToVelocity = ((velocity * Params.timeStep) / (2 * Math.PI * (backTire.Width / 2.0))) * 360;
+                CarTireRotationAnglesInDegrees[carIndex] = (CarTireRotationAnglesInDegrees[carIndex] + rotationDueToVelocity) % 360;
+                backTireLine.RenderTransform = new RotateTransform(CarTireRotationAnglesInDegrees[carIndex], backTireLine.X1, backTireLine.Y1);
+            }
+
+            this.DrawingCanvas.Children.Add(backTireLine);
+            this.DrawingCanvas.Children.Add(backTireHubCap);
+
+            Ellipse frontTire = new Ellipse();
+            frontTire.Stroke = Brushes.Black;
+            frontTire.Fill = Brushes.Black;
+            frontTire.Width = CarTireDiameterInMeters * PixelsPerMeter;
+            frontTire.Height = CarTireDiameterInMeters * PixelsPerMeter;
+            frontTire.SetCurrentValue(Canvas.BottomProperty, carLowerBodyBottomYPos - (frontTire.Height / 2.0));
+            frontTire.SetCurrentValue(Canvas.LeftProperty, carFrontXPos - lowerBody.Width + (CarFrontTireDistanceFromLeftEndOfCarInMeters * PixelsPerMeter));
+            this.DrawingCanvas.Children.Add(frontTire);
+
+            Ellipse frontTireHubCap = new Ellipse();
+            frontTireHubCap.Stroke = Brushes.Black;
+            frontTireHubCap.Fill = Brushes.Silver;
+            frontTireHubCap.Width = CarHubCapDiameterInMeters * PixelsPerMeter;
+            frontTireHubCap.Height = CarHubCapDiameterInMeters * PixelsPerMeter;
+            frontTireHubCap.SetCurrentValue(Canvas.BottomProperty, carLowerBodyBottomYPos - (frontTireHubCap.Height / 2.0));
+            frontTireHubCap.SetCurrentValue(Canvas.LeftProperty, ((double)frontTire.GetValue(Canvas.LeftProperty)) + (((CarTireDiameterInMeters - CarHubCapDiameterInMeters) / 2.0) * PixelsPerMeter));            
+
+            Line frontTireLine = new Line();
+            frontTireLine.Stroke = Brushes.White;
+            frontTireLine.StrokeThickness = Math.Max(CarTireLineStrokeThicknessInMeters * PixelsPerMeter, 1);
+            frontTireLine.Width = frontTire.Width;
+            frontTireLine.Height = frontTire.Height;
+            frontTireLine.SetCurrentValue(Canvas.LeftProperty, (double)frontTire.GetValue(Canvas.LeftProperty));
+            frontTireLine.SetCurrentValue(Canvas.BottomProperty, (double)frontTire.GetValue(Canvas.BottomProperty));
+            frontTireLine.X1 = frontTire.Width / 2.0;
+            frontTireLine.Y1 = frontTire.Height / 2.0;
+            frontTireLine.X2 = frontTireLine.X1 + (frontTire.Width / 2.0);
+            frontTireLine.Y2 = frontTireLine.Y1;
+
+            if (velocity != -1 && carIndex != -1)
+            {
+                double rotationDueToVelocity = ((velocity * Params.timeStep) / (2 * Math.PI * (frontTire.Width / 2.0))) * 360;
+                CarTireRotationAnglesInDegrees[carIndex] = (CarTireRotationAnglesInDegrees[carIndex] + rotationDueToVelocity) % 360;
+                frontTireLine.RenderTransform = new RotateTransform(CarTireRotationAnglesInDegrees[carIndex], frontTireLine.X1, frontTireLine.Y1);
+            }
+
+            this.DrawingCanvas.Children.Add(frontTireLine);
+            this.DrawingCanvas.Children.Add(frontTireHubCap);
+
+            Rectangle backWindow = new Rectangle();
+            backWindow.Stroke = Brushes.Red;
+            backWindow.StrokeThickness = Math.Max(CarWindowStrokeThicknessInMeters * PixelsPerMeter, 1.0);
+            backWindow.Fill = Brushes.Black;
+            backWindow.Width = CarDoorWidthInMeters * PixelsPerMeter;
+            backWindow.Height = UpperCarHeightInMeters * PixelsPerMeter;
+            backWindow.SetCurrentValue(Canvas.BottomProperty, carLowerBodyBottomYPos + lowerBody.Height);
+            backWindow.SetCurrentValue(Canvas.LeftProperty, carFrontXPos - lowerBody.Width + (CarBackDoorDistanceFromLeftEndOfCarInMeters * PixelsPerMeter));
+            this.DrawingCanvas.Children.Add(backWindow);
+
+            Rectangle frontWindow = new Rectangle();
+            frontWindow.Stroke = Brushes.Red;
+            frontWindow.StrokeThickness = Math.Max(CarWindowStrokeThicknessInMeters * PixelsPerMeter, 1.0);
+            frontWindow.Fill = Brushes.Black;
+            frontWindow.Width = CarDoorWidthInMeters * PixelsPerMeter;
+            frontWindow.Height = UpperCarHeightInMeters * PixelsPerMeter;
+            frontWindow.SetCurrentValue(Canvas.BottomProperty, carLowerBodyBottomYPos + lowerBody.Height);
+            frontWindow.SetCurrentValue(Canvas.LeftProperty, carFrontXPos - lowerBody.Width + (CarFrontDoorDistanceFromLeftEndOfCarInMeters * PixelsPerMeter));
+            this.DrawingCanvas.Children.Add(frontWindow);
+
+            Polygon rearWindshield = new Polygon();
+            rearWindshield.Stroke = Brushes.Red;
+            rearWindshield.StrokeThickness = Math.Max(CarWindowStrokeThicknessInMeters * PixelsPerMeter, 1.0);
+            rearWindshield.Fill = Brushes.Black;
+            rearWindshield.Points = new PointCollection()
+            {
+                new Point((rearWindshield.StrokeThickness / 2.0) + (CarRearWindshieldWidthInMeters * PixelsPerMeter), 0),
+                new Point((rearWindshield.StrokeThickness / 2.0) + (CarRearWindshieldWidthInMeters * PixelsPerMeter), backWindow.Height - (rearWindshield.StrokeThickness / 2.0)),
+                new Point((rearWindshield.StrokeThickness / 2.0), backWindow.Height - (rearWindshield.StrokeThickness / 2.0))
+            };
+            rearWindshield.SetCurrentValue(Canvas.LeftProperty, (double)backWindow.GetValue(Canvas.LeftProperty) - (CarRearWindshieldWidthInMeters * PixelsPerMeter));
+            rearWindshield.SetCurrentValue(Canvas.BottomProperty, (double)backWindow.GetValue(Canvas.BottomProperty));
+            rearWindshield.Height = UpperCarHeightInMeters * PixelsPerMeter;
+            rearWindshield.Width = CarRearWindshieldWidthInMeters * PixelsPerMeter;
+            rearWindshield.ClipToBounds = true;
+            this.DrawingCanvas.Children.Add(rearWindshield);
+
+            Polygon frontWindshield = new Polygon();
+            frontWindshield.Stroke = Brushes.Red;
+            frontWindshield.StrokeThickness = Math.Max(CarWindowStrokeThicknessInMeters * PixelsPerMeter, 1.0);
+            frontWindshield.Fill = Brushes.Black;
+            frontWindshield.Points = new PointCollection()
+            {
+                new Point((frontWindshield.StrokeThickness / 2.0), 0),
+                new Point((frontWindshield.StrokeThickness / 2.0), frontWindow.Height - (frontWindshield.StrokeThickness / 2.0)),
+                new Point((frontWindshield.StrokeThickness / 2.0) + (CarFrontWindshieldWidthInMeters * PixelsPerMeter), frontWindow.Height - (frontWindshield.StrokeThickness / 2.0))
+            };
+            frontWindshield.SetCurrentValue(Canvas.LeftProperty, (double)frontWindow.GetValue(Canvas.LeftProperty) + (CarFrontWindshieldWidthInMeters * PixelsPerMeter));
+            frontWindshield.SetCurrentValue(Canvas.BottomProperty, (double)frontWindow.GetValue(Canvas.BottomProperty));
+            frontWindshield.ClipToBounds = true;
+            this.DrawingCanvas.Children.Add(frontWindshield);
+        }
+
+        private void CreateRoadLine(double roadLineCenterXPos, double roadLineCenterYPos)
         {
             Rectangle roadLine = new Rectangle();
             roadLine.Stroke = Brushes.Black;
             roadLine.StrokeThickness = 1;
             roadLine.Fill = Brushes.White;
-            roadLine.Width = RoadLineLengthInMeters * PixelsPerMeter;
+            roadLine.Width = RoadLineWidthInMeters * PixelsPerMeter;
             roadLine.Height = RoadLineHeightInMeters * PixelsPerMeter;
             roadLine.SetCurrentValue(Canvas.LeftProperty, roadLineCenterXPos - (roadLine.Width / 2.0));
             roadLine.SetCurrentValue(Canvas.BottomProperty, roadLineCenterYPos - (roadLine.Height / 2.0));
@@ -144,14 +532,10 @@ namespace ECE457B_Project
             roadLine.RenderTransform = new SkewTransform(-20, 0);
 
             this.DrawingCanvas.Children.Add(roadLine);
-
-            return roadLine;
         }
 
-        private UIElement[] CreateTree(double signBaseCenterXPos, double signBaseYPos)
+        private void CreateTree(double signBaseCenterXPos, double signBaseYPos)
         {
-            UIElement[] treeElements = new UIElement[2];
-
             Rectangle treeTrunk = new Rectangle();
             treeTrunk.Stroke = Brushes.Black;
             treeTrunk.StrokeThickness = 1;
@@ -160,7 +544,6 @@ namespace ECE457B_Project
             treeTrunk.Height = TreeHeightInMeters * PixelsPerMeter;
             treeTrunk.SetCurrentValue(Canvas.BottomProperty, signBaseYPos);
             treeTrunk.SetCurrentValue(Canvas.LeftProperty, signBaseCenterXPos - (treeTrunk.Width / 2.0));
-            treeElements[0] = treeTrunk;
             this.DrawingCanvas.Children.Add(treeTrunk);
 
             Ellipse treeFoliage = new Ellipse();
@@ -171,10 +554,24 @@ namespace ECE457B_Project
             treeFoliage.Height = TreeFoliageHeightInMeters * PixelsPerMeter;
             treeFoliage.SetCurrentValue(Canvas.BottomProperty, signBaseYPos + (TreeHeightInMeters * PixelsPerMeter) - ((TreeFoliageHeightInMeters * PixelsPerMeter) / 2.0));
             treeFoliage.SetCurrentValue(Canvas.LeftProperty, signBaseCenterXPos - ((TreeFoliageWidthInMeters * PixelsPerMeter) / 2.0));
-            treeElements[1] = treeFoliage;
             this.DrawingCanvas.Children.Add(treeFoliage);
-
-            return treeElements;
         }
+
+        private double GetDistanceBetweenFirstAndLastCar(Car[] cars)
+        {
+            double distanceBetweenFirstAndLast = 0;
+
+            for (int i = 0; i < cars.Length; i++)
+            {
+                if (i != cars.Length - 1)
+                {
+                    distanceBetweenFirstAndLast += cars[i].Position - cars[i + 1].Position;
+                }
+            }
+
+            return distanceBetweenFirstAndLast;
+        }
+
+        #endregion
     }
 }

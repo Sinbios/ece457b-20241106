@@ -42,14 +42,6 @@
                        Height="30"
                        Canvas.Bottom="230"
                        Canvas.Left="45"/>
-            <Rectangle Name="MileMarkerSignText"
-                       Stroke="Black"
-                       Fill="White"
-                       Width="10"
-                       Height="5"
-                       Canvas.Bottom="245"
-                        Canvas.Left="50"/>
-
             <Rectangle Name="MileMarkerPost2"
                        Stroke="Black"
                        Fill="Silver"
@@ -64,14 +56,6 @@
                        Height="30"
                        Canvas.Bottom="230"
                        Canvas.Left="345"/>
-            <Rectangle Name="MileMarkerSignText2"
-                       Stroke="Black"
-                       Fill="White"
-                       Width="10"
-                       Height="7"
-                       Canvas.Bottom="245"
-                        Canvas.Left="350"/>
-
             <Rectangle Name="RoadLineRectangle"
                        Stroke="Black"
                        StrokeThickness="1"
@@ -133,39 +117,6 @@
                 </Rectangle.RenderTransform>
             </Rectangle>
             
-            <Ellipse Name="CarBackWheel"
-                     Stroke="Black"
-                     StrokeThickness="1"
-                     Fill="Black"
-                     Width="25"
-                     Height="25"
-                     Canvas.Left="75"
-                     Canvas.Bottom="140"/>
-            <Ellipse Name="CarBackWheelHubCap"
-                     Stroke="Black"
-                     StrokeThickness="1"
-                     Fill="Silver"
-                     Width="15"
-                     Height="15"
-                     Canvas.Left="80"
-                     Canvas.Bottom="145"/>
-            <Ellipse Name="CarFrontWheel"
-                     Stroke="Black"
-                     StrokeThickness="1"
-                     Fill="Black"
-                     Width="25"
-                     Height="25"
-                     Canvas.Left="145"
-                     Canvas.Bottom="140"/>
-            <Ellipse Name="CarFrontWheelHubCap"
-                     Stroke="Black"
-                     StrokeThickness="1"
-                     Fill="Silver"
-                     Width="15"
-                     Height="15"
-                     Canvas.Left="150"
-                     Canvas.Bottom="145"/>
-            
             <Rectangle Name="CarLowerBody"
                        Stroke="Red"
                        StrokeThickness="1"
@@ -219,6 +170,40 @@
                        Canvas.Bottom="165"
                        Canvas.Left="150"
                        Points="0,2 0,18 25,18" Height="20" ClipToBounds="True"/>
+            <Ellipse Name="CarBackWheel"
+                     Stroke="Black"
+                     StrokeThickness="1"
+                     Fill="Black"
+                     Width="22"
+                     Height="22"
+                     Canvas.Left="70"
+                     Canvas.Bottom="140"/>
+            <Ellipse Name="CarBackWheelHubCap"
+                     Stroke="Black"
+                     StrokeThickness="1"
+                     Fill="Silver"
+                     Width="12"
+                     Height="12"
+                     Canvas.Left="75"
+                     Canvas.Bottom="145"/>
+            <Ellipse Name="CarFrontWheel"
+                     Stroke="Black"
+                     StrokeThickness="1"
+                     Fill="Black"
+                     Width="22"
+                     Height="22"
+                     Canvas.Left="150"
+                     Canvas.Bottom="140"/>
+            <Ellipse Name="CarFrontWheelHubCap"
+                     Stroke="Black"
+                     StrokeThickness="1"
+                     Fill="Silver"
+                     Width="12"
+                     Height="12"
+                     Canvas.Left="155"
+                     Canvas.Bottom="145"/>
+            <Rectangle Canvas.Left="192" Canvas.Top="130" Height="11" Name="rectangle1" Stroke="Black" Fill="Yellow" Width="8" />
+            <Rectangle Canvas.Left="55" Canvas.Top="130" Fill="Yellow" Height="11" Name="rectangle2" Stroke="Black" Width="5" />
         </Canvas>
     </Grid>
 </UserControl>

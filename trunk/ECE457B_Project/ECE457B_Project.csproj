@@ -36,9 +36,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotFuzzy">
-      <HintPath>..\..\..\..\..\Desktop\DotFuzzy-1.0-dll\DotFuzzy-1.0-DLL\DotFuzzy.dll</HintPath>
-    </Reference>
     <Reference Include="DynamicDataDisplay">
       <HintPath>..\..\..\..\..\Desktop\DDD-Bin_and_samples\DynamicDataDisplay\DynamicDataDisplay.dll</HintPath>
     </Reference>
@@ -121,6 +118,10 @@
       <Project>{5FCE77C6-C989-49C7-B82B-6F4B7779558C}</Project>
       <Name>FuzzyLogicLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DynamicDataDisplay.dll" />
+    <Resource Include="DynamicDataDisplay.XML" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

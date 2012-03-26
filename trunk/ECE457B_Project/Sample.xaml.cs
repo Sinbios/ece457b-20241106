@@ -36,7 +36,7 @@ namespace ECE457B_Project
 				t += Params.timeStep;
                 var controller = Controller.GetInstance();
 
-				Output(String.Format("{0}\t", t));
+				Output(String.Format("{0:N2}\t", t));
 				for (int i = 0; i < 3; i++)
 				{
 					cars[i].Acceleration = controller.GetOutput(cars[i].Distance - Params.dDesired, cars[i].Velocity);

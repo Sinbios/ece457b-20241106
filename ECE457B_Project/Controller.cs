@@ -10,9 +10,10 @@ namespace ECE457B_Project
 		private LinguisticVariable _acceleration;
 		private readonly FuzzyEngine _engine;
 
-		public Controller()
-		{
+        private static Controller _instance = null;
 
+		private Controller()
+		{
 			_engine = new FuzzyEngine { Consequent = "Acceleration" };
 			Reset();
 
@@ -53,7 +54,17 @@ namespace ECE457B_Project
 			_engine.FuzzyRuleCollection.Add(new FuzzyRule("IF (Distance IS Very_Far) AND (Velocity IS Very_Fast) THEN Acceleration IS None"));
 		}
 
-		private void Reset()
+        public static Controller GetInstance()
+        {
+            if (_instance == null)
+            {
+                _instance = new Controller();
+            }
+
+            return _instance;
+        }
+
+		public void Reset()
 		{
 			_velocity = new LinguisticVariable("Velocity");
 			_distanceDiff = new LinguisticVariable("Distance");
@@ -75,7 +86,7 @@ namespace ECE457B_Project
 			_velocity.MembershipFunctionCollection.Add(new MembershipFunction("Very_Fast", Params.vDesired + Params.velocity_d1, Params.vDesired + Params.velocity_d2, 300, 300));
 
 			_distanceDiff.MembershipFunctionCollection.Clear();
-			_distanceDiff.MembershipFunctionCollection.Add(new MembershipFunction("Very_Close", -Params.dDesired, -Params.dDesired, -Params.distance_d2, -Params.distance_d1));
+            _distanceDiff.MembershipFunctionCollection.Add(new MembershipFunction("Very_Close", -double.MaxValue, -double.MaxValue, -Params.distance_d2, -Params.distance_d1));
 			_distanceDiff.MembershipFunctionCollection.Add(new MembershipFunction("Close", -Params.distance_d2, -Params.distance_d1, -Params.distance_d1, 0));
 			_distanceDiff.MembershipFunctionCollection.Add(new MembershipFunction("Just_Right", -Params.distance_d1, 0, 0, Params.distance_d1));
 			_distanceDiff.MembershipFunctionCollection.Add(new MembershipFunction("Far", 0, Params.distance_d1, Params.distance_d1, Params.distance_d2));

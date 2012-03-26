@@ -34,7 +34,7 @@ namespace ECE457B_Project
 			while (true)
 			{
 				t += Params.timeStep;
-				var controller = new Controller();
+                var controller = Controller.GetInstance();
 
 				Output(String.Format("{0}\t", t));
 				for (int i = 0; i < 3; i++)

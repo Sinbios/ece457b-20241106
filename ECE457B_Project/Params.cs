@@ -2,12 +2,12 @@
 {
     public static class Params
     {
-    	public static double timeStep = 1;
-        public static double vDesired = 50;
-        public static double dDesired = 10;
-        public static double dInitial1 = 20;
-        public static double dInitial2 = 5;
-        public static double vInitial = 30;
+    	public static double timeStep = 0.04;
+        public static double vDesired = 30;
+        public static double dDesired = 5;
+        public static double dInitial1 = 10;
+        public static double dInitial2 = 15;
+        public static double vInitial = 0;
 
     	public static double velocity_d1 = 5;
 		public static double velocity_d2 = 10;

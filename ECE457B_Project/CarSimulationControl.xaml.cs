@@ -143,7 +143,7 @@ namespace ECE457B_Project
             double curCarFrontXPos = this.Width - (EmptyRoadLengthInFrontOfPilotCarInMeters * PixelsPerMeter);
             for (int i = 0; i < cars.Length; i++)
             {
-                this.CreateCar(curCarFrontXPos, ((2.0 / 3.0) * this.Height) - HeightOfRoadsideInPixels - ((RoadHeightInMeters * PixelsPerMeter) / 2.0));
+                this.CreateCar(curCarFrontXPos, ((2.0 / 3.0) * this.Height) - HeightOfRoadsideInPixels - ((RoadHeightInMeters * PixelsPerMeter) / 2.0), i);
 
                 if (i != cars.Length - 1)
                 {
@@ -276,7 +276,7 @@ namespace ECE457B_Project
             double curCarFrontXPos = this.Width - (EmptyRoadLengthInFrontOfPilotCarInMeters * PixelsPerMeter);
             for (int i = 0; i < cars.Length; i++)
             {
-                this.CreateCar(curCarFrontXPos, ((2.0 / 3.0) * this.Height) - HeightOfRoadsideInPixels - ((RoadHeightInMeters * PixelsPerMeter) / 2.0), cars[i].Velocity, i);
+                this.CreateCar(curCarFrontXPos, ((2.0 / 3.0) * this.Height) - HeightOfRoadsideInPixels - ((RoadHeightInMeters * PixelsPerMeter) / 2.0), i, cars[i].Velocity);
 
                 if (i != cars.Length - 1)
                 {
@@ -340,11 +340,11 @@ namespace ECE457B_Project
             }
         }
 
-        private void CreateCar(double carFrontXPos, double carLowerBodyBottomYPos, double velocity = -1, int carIndex = -1)
+        private void CreateCar(double carFrontXPos, double carLowerBodyBottomYPos, int carIndex, double velocity = -1)
         {
             Rectangle lowerBody = new Rectangle();
-            lowerBody.Stroke = Brushes.Red;
-            lowerBody.Fill = Brushes.Red;
+            lowerBody.Stroke = MainWindow.CarBrushes[carIndex];
+            lowerBody.Fill = MainWindow.CarBrushes[carIndex];
             lowerBody.Width = LowerCarWidthInMeters * PixelsPerMeter;
             lowerBody.Height = LowerCarHeightInMeters * PixelsPerMeter;
             lowerBody.SetCurrentValue(Canvas.BottomProperty, carLowerBodyBottomYPos);
@@ -466,7 +466,7 @@ namespace ECE457B_Project
             this.DrawingCanvas.Children.Add(frontTireHubCap);
 
             Rectangle backWindow = new Rectangle();
-            backWindow.Stroke = Brushes.Red;
+            backWindow.Stroke = MainWindow.CarBrushes[carIndex];
             backWindow.StrokeThickness = Math.Max(CarWindowStrokeThicknessInMeters * PixelsPerMeter, 1.0);
             backWindow.Fill = Brushes.Black;
             backWindow.Width = CarDoorWidthInMeters * PixelsPerMeter;
@@ -476,7 +476,7 @@ namespace ECE457B_Project
             this.DrawingCanvas.Children.Add(backWindow);
 
             Rectangle frontWindow = new Rectangle();
-            frontWindow.Stroke = Brushes.Red;
+            frontWindow.Stroke = MainWindow.CarBrushes[carIndex];
             frontWindow.StrokeThickness = Math.Max(CarWindowStrokeThicknessInMeters * PixelsPerMeter, 1.0);
             frontWindow.Fill = Brushes.Black;
             frontWindow.Width = CarDoorWidthInMeters * PixelsPerMeter;
@@ -486,7 +486,7 @@ namespace ECE457B_Project
             this.DrawingCanvas.Children.Add(frontWindow);
 
             Polygon rearWindshield = new Polygon();
-            rearWindshield.Stroke = Brushes.Red;
+            rearWindshield.Stroke = MainWindow.CarBrushes[carIndex];
             rearWindshield.StrokeThickness = Math.Max(CarWindowStrokeThicknessInMeters * PixelsPerMeter, 1.0);
             rearWindshield.Fill = Brushes.Black;
             rearWindshield.Points = new PointCollection()
@@ -503,7 +503,7 @@ namespace ECE457B_Project
             this.DrawingCanvas.Children.Add(rearWindshield);
 
             Polygon frontWindshield = new Polygon();
-            frontWindshield.Stroke = Brushes.Red;
+            frontWindshield.Stroke = MainWindow.CarBrushes[carIndex];
             frontWindshield.StrokeThickness = Math.Max(CarWindowStrokeThicknessInMeters * PixelsPerMeter, 1.0);
             frontWindshield.Fill = Brushes.Black;
             frontWindshield.Points = new PointCollection()

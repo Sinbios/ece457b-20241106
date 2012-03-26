@@ -10,35 +10,39 @@
         <Grid.RowDefinitions>
             <RowDefinition Name="TitleRow" Height="55"/>
             <RowDefinition Name="SimulationPerformanceRow" Height="Auto"/>
-            <RowDefinition Name="SimulationInfoRow" Height="500"/>
+            <RowDefinition Name="SimulationInfoRow" Height="Auto"/>
         </Grid.RowDefinitions>
         <Label Name="TitleLabel" Grid.Row="0" FontFamily="Arial" FontSize="38" HorizontalAlignment="Center" FontWeight="Bold" Content="Autonomous Car Platoon Simulation"/>
         <Grid Name="SimulationParameterAndVisualiationGrid" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Name="ParameterColumn" Width="250"/>
                 <ColumnDefinition Name="SystemVisualizationColumn" Width="Auto"/>               
             </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0">
+            <Label Name="ParametersLabel" Grid.Row="0" Grid.Column="0" FontFamily="Arial" FontSize="26" HorizontalAlignment="Center" Content="Parameters"/>
+            <Label Name="VisualizationLabel" Grid.Row="0" Grid.Column="1" FontFamily="Arial" FontSize="26" HorizontalAlignment="Center" Content="System Visualization"/>
+            <Grid Grid.Row="1" Grid.Column="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="40"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Label Name="ParametersLabel" Grid.Row="0" FontFamily="Arial" FontSize="24" HorizontalAlignment="Center" Content="Parameters"/>
-                <TabControl Name="ParametersTabControl" Grid.Row="1">
+                <TabControl Name="ParametersTabControl" Grid.Row="0">
                     <TabItem Header="System" FontFamily="Arial" FontSize="18">
                         <Grid VerticalAlignment="Center">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="125"/>
                                 <ColumnDefinition Width="60"/>
                                 <ColumnDefinition Width="40"/>
                             </Grid.ColumnDefinitions>
@@ -50,30 +54,67 @@
                             <TextBox Name="DesiredVelocityTextBox" TextChanged="DesiredVelocityTextBox_TextChanged" Grid.Row="1" Grid.Column="1" FontFamily="Arial" FontSize="16" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
                             <Label Grid.Row="1" Grid.Column="2" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="m/s"/>
                             
-                            <Label Grid.Row="3" Grid.Column="0" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="D__initial__1"/>
-                            <TextBox Name="InitialDistance1TextBox" Grid.Row="3" Grid.Column="1" FontFamily="Arial" FontSize="16" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
+                            <Label Grid.Row="2" Grid.Column="0" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="D__initial__1"/>
+                            <TextBox Name="InitialDistance1TextBox" TextChanged="InitialDistance1TextBox_TextChanged" Grid.Row="2" Grid.Column="1" FontFamily="Arial" FontSize="16" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
+                            <Label Grid.Row="2" Grid.Column="2" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="m"/>
+                            
+                            <Label Grid.Row="3" Grid.Column="0" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="D__initial__2"/>
+                            <TextBox Name="InitialDistance2TextBox" TextChanged="InitialDistance2TextBox_TextChanged" Grid.Row="3" Grid.Column="1" FontFamily="Arial" FontSize="16" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
                             <Label Grid.Row="3" Grid.Column="2" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="m"/>
                             
-                            <Label Grid.Row="4" Grid.Column="0" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="D__initial__2"/>
-                            <TextBox Name="InitialDistance2TextBox" Grid.Row="4" Grid.Column="1" FontFamily="Arial" FontSize="16" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
-                            <Label Grid.Row="4" Grid.Column="2" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="m"/>
+                            <Label Grid.Row="4" Grid.Column="0" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="D__desired"/>
+                            <TextBox Name="DesiredDistanceTextBox" TextChanged="DesiredDistanceTextBox_TextChanged" Grid.Row="4" Grid.Column="1" FontFamily="Arial" FontSize="16" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
+                            <Label Grid.Row="4" Grid.Column="2" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="m"/>      
                             
-                            <Label Grid.Row="5" Grid.Column="0" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="D__desired"/>
-                            <TextBox Name="DesiredDistanceTextBox" TextChanged="DesiredDistanceTextBox_TextChanged" Grid.Row="5" Grid.Column="1" FontFamily="Arial" FontSize="16" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
-                            <Label Grid.Row="5" Grid.Column="2" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="m"/>      
+                            <Label Grid.Row="5" Grid.Column="0" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Convergence at"/>
+                            <TextBox Name="ConvergencePercentTextBox" TextChanged="ConvergencePercentTextBox_TextChanged" Grid.Row="5" Grid.Column="1" FontFamily="Arial" FontSize="16" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
+                            <Label Grid.Row="5" Grid.Column="2" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="%"/>
                         </Grid>
                     </TabItem>
                     <TabItem Header="Fuzzy Logic" FontFamily="Arial" FontSize="18">
                         
                     </TabItem>
                 </TabControl>
-                <Button Name="PerformanceControlButton" Grid.Row="2" Width="180" Height="40" FontWeight="Bold" HorizontalAlignment="Center" Click="PerformanceControlButton_Click">
+                <Button Name="PerformanceControlButton" Grid.Row="1" Width="180" Height="35" HorizontalAlignment="Center" Click="PerformanceControlButton_Click">
                     <TextBlock Name="PerformanceControlButtonText" FontFamily="Arial" FontSize="18"/>
                 </Button>
-                <Button Name="EndSimulationButton" Grid.Row="3" Width="180" Height="40" FontWeight="Bold" HorizontalAlignment="Center" Click="EndSimulationButton_Click" Visibility="Hidden">
+                <Button Name="EndSimulationButton" Grid.Row="2" Width="180" Height="35" HorizontalAlignment="Center" Click="EndSimulationButton_Click" Visibility="Hidden">
                     <TextBlock FontFamily="Arial" FontSize="18" Text="End Simulation"/>
                 </Button>
             </Grid>
-        </Grid>        
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontFamily="Arial" FontSize="26" HorizontalAlignment="Center" VerticalAlignment="Center" Content="System Information"/>
+            <Label Name="TotalSystemRuntimeLabel" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontFamily="Arial" FontSize="20" Height="35" HorizontalAlignment="Left" Visibility="Hidden">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Runtime since last convergence/update: "/>
+                    <TextBlock Name="TotalSystemRuntimeLabelText"/>
+                    <TextBlock Name="SystemConvergedText" FontWeight="Bold" Text=" -- system has converged" Visibility="Hidden"/>
+                </StackPanel>
+            </Label>
+            <Grid Name="VelocityGraphGrid" Grid.Row="2" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label Name="VelocityGraphLabel" Grid.Row="1" HorizontalAlignment="Center" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Velocity"/>
+            </Grid>
+            <Grid Name="AccelerationGraphGrid" Grid.Row="2" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label HorizontalAlignment="Center" Grid.Row="1" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Acceleration"/>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

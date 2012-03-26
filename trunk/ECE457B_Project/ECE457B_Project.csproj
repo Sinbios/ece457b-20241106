@@ -39,6 +39,9 @@
     <Reference Include="DotFuzzy">
       <HintPath>..\..\..\..\..\Desktop\DotFuzzy-1.0-dll\DotFuzzy-1.0-DLL\DotFuzzy.dll</HintPath>
     </Reference>
+    <Reference Include="DynamicDataDisplay">
+      <HintPath>..\..\..\..\..\Desktop\DDD-Bin_and_samples\DynamicDataDisplay\DynamicDataDisplay.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />

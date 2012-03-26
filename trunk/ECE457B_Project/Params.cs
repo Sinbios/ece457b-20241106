@@ -21,5 +21,7 @@
 		public static double brake_d1 = -2;
 		public static double brake_d2 = -4;
 		public static double brake_limit = -10;
+
+        public static double convergencePercent = 0.015;
     }
 }

@@ -72,7 +72,24 @@
                         </Grid>
                     </TabItem>
                     <TabItem Header="Fuzzy Logic" FontFamily="Arial" FontSize="18">
-                        
+                        <Grid VerticalAlignment="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" FontFamily="Arial" FontSize="18" Content="Membership function type:"/>
+                            <ComboBox Name="MembershipFunctionTypeComboBox" Grid.Row="1" SelectionChanged="MembershipFunctionTypeComboBox_SelectionChanged" FontFamily="Arial" FontSize="18">
+                                
+                            </ComboBox>
+
+                            <Label Grid.Row="3" FontFamily="Arial" FontSize="18" Content="Membership function type:"/>
+                            <ComboBox Name="TNormTypeComboBox" Grid.Row="4" SelectionChanged="TNormTypeComboBox_SelectionChanged" FontFamily="Arial" FontSize="18">
+
+                            </ComboBox>
+                        </Grid>
                     </TabItem>
                 </TabControl>
                 <Button Name="PerformanceControlButton" Grid.Row="1" Width="180" Height="35" HorizontalAlignment="Center" Click="PerformanceControlButton_Click">
@@ -92,28 +109,36 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontFamily="Arial" FontSize="26" HorizontalAlignment="Center" VerticalAlignment="Center" Content="System Information"/>
-            <Label Name="TotalSystemRuntimeLabel" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontFamily="Arial" FontSize="20" Height="35" HorizontalAlignment="Left" Visibility="Hidden">
+            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" FontFamily="Arial" FontSize="26" HorizontalAlignment="Center" VerticalAlignment="Center" Content="System Information"/>
+            <Label Name="TotalSystemRuntimeLabel" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" FontFamily="Arial" FontSize="20" Height="35" HorizontalAlignment="Left" Visibility="Hidden">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Runtime since last convergence/update: "/>
-                    <TextBlock Name="TotalSystemRuntimeLabelText"/>
+                    <TextBlock Name="CurrentSystemRuntimeLabelText"/>
                     <TextBlock Name="SystemConvergedText" FontWeight="Bold" Text=" -- system has converged" Visibility="Hidden"/>
                 </StackPanel>
             </Label>
-            <Grid Name="VelocityGraphGrid" Grid.Row="2" Grid.Column="0">
+            <Grid Name="DistanceGraphGrid" Grid.Row="2" Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Label Name="VelocityGraphLabel" Grid.Row="1" HorizontalAlignment="Center" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Velocity"/>
+                <Label Name="DistanceGraphLabel" Grid.Row="1" HorizontalAlignment="Center" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Inter-car Distance (m) vs. Time (s)"/>
             </Grid>
-            <Grid Name="AccelerationGraphGrid" Grid.Row="2" Grid.Column="1">
+            <Grid Name="VelocityGraphGrid" Grid.Row="2" Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Label HorizontalAlignment="Center" Grid.Row="1" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Acceleration"/>
+                <Label Name="VelocityGraphLabel" Grid.Row="1" HorizontalAlignment="Center" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Velocity (m/s) vs. Time (s)"/>
+            </Grid>
+            <Grid Name="AccelerationGraphGrid" Grid.Row="2" Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label HorizontalAlignment="Center" Grid.Row="1" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Acceleration (m/s^2) vs. Time(s)"/>
             </Grid>
         </Grid>
     </Grid>

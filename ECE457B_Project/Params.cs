@@ -4,8 +4,8 @@ namespace ECE457B_Project
 {
 	public static class Params
 	{
-		public static double timeStep = 0.04;
-		public static double vDesired = 30;
+		public static double timeStep = 0.05;
+		public static double vDesired = 10;
 		public static double dDesired = 5;
 		public static double dInitial1 = 10;
 		public static double dInitial2 = 15;
@@ -27,8 +27,8 @@ namespace ECE457B_Project
 
 		public static double convergencePercent = 0.015;
 
-		public static FunctionType functionType = FunctionType.Gaussian;
-		public static AndMethod tNorm = AndMethod.Min;
+		public static FunctionType functionType = FunctionType.Trapezoidal;
+		public static AndMethod tNorm = AndMethod.Production;
 	}
 
 	public enum FunctionType

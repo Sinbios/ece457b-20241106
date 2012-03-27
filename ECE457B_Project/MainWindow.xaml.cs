@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Threading;
 using Microsoft.Research.DynamicDataDisplay;
+using Microsoft.Research.DynamicDataDisplay.Charts;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 using Microsoft.Research.DynamicDataDisplay.PointMarkers;
 
@@ -17,14 +18,16 @@ namespace ECE457B_Project
     {
         #region Static Variables
 
-        ObservableDataSource<Point>[] VelocityDataPoints;
-        ObservableDataSource<Point>[] AccelerationDataPoints;
-
         public static Brush[] CarBrushes = new Brush[] { Brushes.Red, Brushes.Green, Brushes.Blue };
-        public static Color[] CarColors = new Color[] { Colors.Red, Colors.Green, Colors.Blue };        
+        public static Brush[] CarDistanceBrushes = new Brush[] { Brushes.Green, Brushes.Blue };
 
-        private static ChartPlotter AccelerationChartPlotter = null;
+        private ObservableDataSource<Point>[] DistanceDataPoints;
+        private ObservableDataSource<Point>[] VelocityDataPoints;
+        private ObservableDataSource<Point>[] AccelerationDataPoints;
+
+        private static ChartPlotter DistanceChartPlotter = null;
         private static ChartPlotter VelocityChartPlotter = null;
+        private static ChartPlotter AccelerationChartPlotter = null;
         private static double PlotLineThickness = 2;
 
         private static Thread SimulationThread = null;
@@ -63,14 +66,51 @@ namespace ECE457B_Project
 
             this.InitialVelocityTextBox.Text = String.Format("{0:0.00}", Params.vInitial);
             this.DesiredVelocityTextBox.Text = String.Format("{0:0.00}", Params.vDesired);
-
             this.InitialDistance1TextBox.Text = String.Format("{0:0.00}", Params.dInitial1);
             this.InitialDistance2TextBox.Text = String.Format("{0:0.00}", Params.dInitial2);
             this.DesiredDistanceTextBox.Text = String.Format("{0:0.00}", Params.dDesired);
-
             this.ConvergencePercentTextBox.Text = String.Format("{0:0.00}", Params.convergencePercent * 100.0);
 
             this.PerformanceControlButtonText.Text = PerformanceControlStartString;
+
+            //Set up membership function selection combobox
+            List<ComboBoxItem> memFnTypeComboBoxItems = new List<ComboBoxItem>();
+            foreach (FunctionType memFnType in Enum.GetValues(typeof(FunctionType)))
+            {
+                ComboBoxItem memFnTypeComboBoxItem = new ComboBoxItem();
+                memFnTypeComboBoxItem.Content = Enum.GetName(typeof(FunctionType), memFnType);
+                
+                memFnTypeComboBoxItems.Add(memFnTypeComboBoxItem);
+            }
+            this.MembershipFunctionTypeComboBox.ItemsSource = memFnTypeComboBoxItems;
+            this.MembershipFunctionTypeComboBox.SelectedIndex = (int)Params.functionType;
+
+            //Set up t-norm selection combobox
+            List<ComboBoxItem> tNormTypeComboBoxItems = new List<ComboBoxItem>();
+            foreach (AI.Fuzzy.Library.AndMethod tNormType in Enum.GetValues(typeof(AI.Fuzzy.Library.AndMethod)))
+            {
+                ComboBoxItem tNormTypeComboBoxItem = new ComboBoxItem();
+                tNormTypeComboBoxItem.Content = Enum.GetName(typeof(AI.Fuzzy.Library.AndMethod), tNormType);
+
+                tNormTypeComboBoxItems.Add(tNormTypeComboBoxItem);
+            }
+            this.TNormTypeComboBox.ItemsSource = tNormTypeComboBoxItems;
+            this.TNormTypeComboBox.SelectedIndex = (int)Params.tNorm;
+
+            //Set up distance graph
+            DistanceChartPlotter = new ChartPlotter();
+            DistanceChartPlotter.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+            DistanceChartPlotter.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
+            DistanceChartPlotter.SetCurrentValue(Grid.RowProperty, 0);
+            DistanceChartPlotter.Margin = new Thickness(10, 0, 10, 0);
+            DistanceDataPoints = new ObservableDataSource<Point>[NumCars - 1];
+            for (int i = 0; i < NumCars - 1; i++)
+            {
+                DistanceDataPoints[i] = new ObservableDataSource<Point>();
+                DistanceChartPlotter.AddLineGraph(DistanceDataPoints[i], new Pen(CarDistanceBrushes[i], PlotLineThickness), new PenDescription(String.Format("D_{0}", i)));
+            }
+            DistanceChartPlotter.LegendVisible = false;
+            this.DistanceGraphGrid.Children.Add(DistanceChartPlotter);
 
             //Set up velocity graph
             VelocityChartPlotter = new ChartPlotter();
@@ -84,21 +124,10 @@ namespace ECE457B_Project
                 VelocityDataPoints[i] = new ObservableDataSource<Point>();
                 VelocityChartPlotter.AddLineGraph(VelocityDataPoints[i], new Pen(CarBrushes[i], PlotLineThickness), new PenDescription(String.Format("V_{0}", i)));
             }
+            VelocityChartPlotter.LegendVisible = false;
             this.VelocityGraphGrid.Children.Add(VelocityChartPlotter);            
 
-            /*
-            var testDataSourceX = new EnumerableDataSource<int>(new List<int> { 1, 2, 3 });
-            testDataSourceX.SetXMapping(x => x);
-
-            var testDataSourceY = new EnumerableDataSource<int>(new List<int> { 10, 11, 12});
-            testDataSourceY.SetYMapping(y => y);
-
-            CompositeDataSource testData = new CompositeDataSource(testDataSourceX, testDataSourceY);
-
-            VelocityChartPlotter.AddLineGraph(testData, new Pen(Brushes.Blue, 5), new CirclePointMarker { Size = 10.0, Fill = Brushes.Red }, new PenDescription("Test data"));
-            VelocityChartPlotter.Visible = new Rect(new Point(0, 0), new Size(20, 20));
-            */
-
+            //Set up acceleration graph
             AccelerationChartPlotter = new ChartPlotter();
             AccelerationChartPlotter.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
             AccelerationChartPlotter.VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
@@ -110,6 +139,7 @@ namespace ECE457B_Project
                 AccelerationDataPoints[i] = new ObservableDataSource<Point>();
                 AccelerationChartPlotter.AddLineGraph(AccelerationDataPoints[i], new Pen(CarBrushes[i], PlotLineThickness), new PenDescription(String.Format("A_{0}", i)));
             }
+            AccelerationChartPlotter.LegendVisible = false;
             this.AccelerationGraphGrid.Children.Add(AccelerationChartPlotter);
         }
 
@@ -133,22 +163,12 @@ namespace ECE457B_Project
                     CarSimulationControl.GetInstance().InitializeVisualization(cars);
                     fuzzyController.Reset();
 
-                    ClearPointSources(VelocityDataPoints);
-                    ClearPointSources(AccelerationDataPoints);
+                    this.ClearPointSources();
                 });
 
+                TimeSpan currentRuntimeFromLastUpdate = TimeSpan.FromSeconds(0);
                 TimeSpan totalRuntime = TimeSpan.FromSeconds(0);
                 PauseSimulation = false;
-
-                /*
-                List<double> timeStepData = new List<double>();
-
-                List<double>[] carsVelocityData = new List<double>[cars.Length];
-                InitializeLists(carsVelocityData);
-
-                List<double>[] carsAccelerationData = new List<double>[cars.Length];
-                InitializeLists(carsAccelerationData);
-                 */
 
                 while (true)
                 {
@@ -167,7 +187,7 @@ namespace ECE457B_Project
                             this.SystemConvergedText.Visibility = System.Windows.Visibility.Hidden;
                         });
 
-                        totalRuntime = TimeSpan.FromSeconds(0);
+                        currentRuntimeFromLastUpdate = TimeSpan.FromSeconds(0);
                     }
 
                     if (ParameterUpdated)
@@ -177,7 +197,7 @@ namespace ECE457B_Project
                             ParameterUpdated = false;
                         }
 
-                        totalRuntime = TimeSpan.FromSeconds(0);
+                        currentRuntimeFromLastUpdate = TimeSpan.FromSeconds(0);
                         Dispatcher.Invoke((Action)delegate
                         {
                             fuzzyController.Reset();
@@ -186,27 +206,40 @@ namespace ECE457B_Project
 
                     Dispatcher.Invoke((Action)delegate
                     {
+                        CarSimulationControl.GetInstance().UpdateUI(cars);
                         this.UpdateGraphPoints(totalRuntime, cars);
+                        this.CurrentSystemRuntimeLabelText.Text = String.Format("{0:0.00} seconds", currentRuntimeFromLastUpdate.TotalSeconds);
                     });
+
+                    /*
+                    Car[] carsCopy = new Car[cars.Length];
 
                     for (int i = 0; i < cars.Length; i++)
                     {
-                        cars[i].Acceleration = fuzzyController.GetOutput(cars[i].Distance - Params.dDesired, cars[i].Velocity);
-                        cars[i].Position = cars[i].Position + cars[i].Velocity * Params.timeStep + 0.5 * cars[i].Acceleration * Params.timeStep * Params.timeStep;
-                        if (i != 0)
-                        {
-                            cars[i].Distance = Math.Max(0, cars[i - 1].Position - cars[i].Position);
-                        }
-                        cars[i].Velocity = cars[i].Velocity + cars[i].Acceleration * Params.timeStep;
+                        carsCopy[i] = new Car(i);
+                        carsCopy[i].Position = cars[i].Position;
+                        carsCopy[i].Velocity = cars[i].Velocity;
+                        carsCopy[i].Acceleration = cars[i].Acceleration;
+                        carsCopy[i].Distance = cars[i].Distance;
                     }
-
+                    */
+                    //Thread fuzzyInferenceThread = new Thread(new ThreadStart(delegate
+                    //{
+                        for (int i = 0; i < cars.Length; i++)
+                        {
+                            cars[i].Acceleration = fuzzyController.GetOutput(cars[i].Distance - Params.dDesired, cars[i].Velocity);
+                            cars[i].Position = cars[i].Position + cars[i].Velocity * Params.timeStep + 0.5 * cars[i].Acceleration * Params.timeStep * Params.timeStep;
+                            if (i != 0)
+                            {
+                                cars[i].Distance = Math.Max(0, cars[i - 1].Position - cars[i].Position);
+                            }
+                            cars[i].Velocity = Math.Max(0, cars[i].Velocity + cars[i].Acceleration * Params.timeStep);
+                        }
+                    //}));
+                    //fuzzyInferenceThread.Start();
+                    
                     totalRuntime += TimeSpan.FromSeconds(Params.timeStep);
-
-                    Dispatcher.Invoke((Action)delegate
-                    {
-                        CarSimulationControl.GetInstance().UpdateUI(cars);
-                        this.TotalSystemRuntimeLabelText.Text = String.Format("{0:0.00} seconds", totalRuntime.TotalSeconds);
-                    });
+                    currentRuntimeFromLastUpdate += TimeSpan.FromSeconds(Params.timeStep);
 
                     //Check convergence
                     if (ApproximatelyEqual(cars[1].Distance, Params.dDesired, Params.convergencePercent)
@@ -300,6 +333,8 @@ namespace ECE457B_Project
             this.EndSimulationButton.Visibility = System.Windows.Visibility.Hidden;
             this.TotalSystemRuntimeLabel.Visibility = System.Windows.Visibility.Hidden;
             this.SystemConvergedText.Visibility = System.Windows.Visibility.Hidden;
+
+            this.ClearPointSources();
         }
 
         private void InitialDistance1TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -328,6 +363,16 @@ namespace ECE457B_Project
             }
         }
 
+        private void MembershipFunctionTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Params.functionType = (FunctionType)Enum.Parse(typeof(FunctionType), (string)(((ComboBoxItem)this.MembershipFunctionTypeComboBox.SelectedItem).Content));
+
+            lock (this)
+            {
+                ParameterUpdated = true;
+            }
+        }
+
         private void PerformanceControlButton_Click(object sender, RoutedEventArgs e)
         {
             if (this.PerformanceControlButtonText.Text.Equals(PerformanceControlStartString))
@@ -342,7 +387,7 @@ namespace ECE457B_Project
                 this.InitialDistance2TextBox.IsEnabled = false;
 
                 this.TotalSystemRuntimeLabel.Visibility = System.Windows.Visibility.Visible;
-                this.TotalSystemRuntimeLabelText.Text = "0 seconds";
+                this.CurrentSystemRuntimeLabelText.Text = "0 seconds";
 
                 if (SimulationThread != null && SimulationThread.IsAlive)
                 {
@@ -366,6 +411,16 @@ namespace ECE457B_Project
             {
                 PauseSimulation = false;
                 this.PerformanceControlButtonText.Text = PerformanceControlPauseString;
+            }
+        }
+
+        private void TNormTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Params.tNorm = (AI.Fuzzy.Library.AndMethod)Enum.Parse(typeof(AI.Fuzzy.Library.AndMethod), (string)(((ComboBoxItem)this.TNormTypeComboBox.SelectedItem).Content));
+
+            lock (this)
+            {
+                ParameterUpdated = true;
             }
         }
 
@@ -398,11 +453,16 @@ namespace ECE457B_Project
             }
         }
 
-        private static void ClearPointSources(ObservableDataSource<Point>[] pointSourcesToClear)
+        private void ClearPointSources()
         {
-            foreach (ObservableDataSource<Point> pointSource in pointSourcesToClear)
+            for (int i = 0; i < NumCars; i++)
             {
-                pointSource.Collection.Clear();
+                if (i != NumCars - 1)
+                {
+                    DistanceDataPoints[i].Collection.Clear();
+                }
+                VelocityDataPoints[i].Collection.Clear();
+                AccelerationDataPoints[i].Collection.Clear();
             }
         }
 
@@ -410,6 +470,10 @@ namespace ECE457B_Project
         {
             for (int i = 0; i < cars.Length; i++)
             {
+                if (i != cars.Length - 1)
+                {
+                    DistanceDataPoints[i].AppendAsync(Dispatcher, new Point(currentRuntime.TotalSeconds, cars[i + 1].Distance));
+                }
                 VelocityDataPoints[i].AppendAsync(Dispatcher, new Point(currentRuntime.TotalSeconds, cars[i].Velocity));
                 AccelerationDataPoints[i].AppendAsync(Dispatcher, new Point(currentRuntime.TotalSeconds, cars[i].Acceleration));
             }
@@ -427,6 +491,9 @@ namespace ECE457B_Project
                 Params.dDesired = Double.Parse(this.DesiredDistanceTextBox.Text);
 
                 Params.convergencePercent = Double.Parse(this.ConvergencePercentTextBox.Text) / 100.0;
+
+                Params.functionType = (FunctionType)Enum.Parse(typeof(FunctionType),(string)(((ComboBoxItem)(this.MembershipFunctionTypeComboBox.SelectedItem)).Content));
+                Params.tNorm = (AI.Fuzzy.Library.AndMethod)Enum.Parse(typeof(AI.Fuzzy.Library.AndMethod), (string)(((ComboBoxItem)(this.TNormTypeComboBox.SelectedItem)).Content));
 
                 return true;
             }

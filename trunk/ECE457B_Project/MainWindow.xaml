@@ -31,47 +31,55 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <TabControl Name="ParametersTabControl" Grid.Row="0">
-                    <TabItem Header="System" FontFamily="Arial" FontSize="18">
-                        <Grid VerticalAlignment="Center">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="125"/>
-                                <ColumnDefinition Width="60"/>
-                                <ColumnDefinition Width="40"/>
-                            </Grid.ColumnDefinitions>
-                            <Label Grid.Row="0" Grid.Column="0" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="V__initial"/>
-                            <TextBox Name="InitialVelocityTextBox" Grid.Row="0" Grid.Column="1" FontFamily="Arial" FontSize="16" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
-                            <Label Grid.Row="0" Grid.Column="2" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="m/s"/>
+                    <TabItem Header="System" FontFamily="Arial" FontSize="16">
+                        <ScrollViewer>
+                            <Grid Name="SystemParameterGrid" VerticalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="125"/>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="40"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <Label FontFamily="Arial" FontSize="15" Grid.Row="0" Grid.Column="0" Content="Number of cars"/>
+                                <ComboBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" Name="NumCarComboBox" FontFamily="Arial" FontSize="15" SelectionChanged="NumCarComboBox_SelectionChanged"/>
+                                
+                                <Label Grid.Row="1" Grid.Column="0" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Convergence at"/>
+                                <TextBox Name="ConvergencePercentTextBox" TextChanged="ConvergencePercentTextBox_TextChanged" Grid.Row="1" Grid.Column="1" FontFamily="Arial" FontSize="15" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
+                                <Label Grid.Row="1" Grid.Column="2" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Content="%"/>
+                                
+                                <Label Grid.Row="2" Grid.Column="0" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Content="V__initial"/>
+                                <TextBox Name="InitialVelocityTextBox" TextChanged="InitialVelocityTextBox_TextChanged" Grid.Row="2" Grid.Column="1" FontFamily="Arial" FontSize="15" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
+                                <Label Grid.Row="2" Grid.Column="2" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Content="m/s"/>
                             
-                            <Label Grid.Row="1" Grid.Column="0" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="V__desired"/>
-                            <TextBox Name="DesiredVelocityTextBox" TextChanged="DesiredVelocityTextBox_TextChanged" Grid.Row="1" Grid.Column="1" FontFamily="Arial" FontSize="16" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
-                            <Label Grid.Row="1" Grid.Column="2" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="m/s"/>
+                                <Label Grid.Row="3" Grid.Column="0" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Content="V__desired"/>
+                                <TextBox Name="DesiredVelocityTextBox" TextChanged="DesiredVelocityTextBox_TextChanged" Grid.Row="3" Grid.Column="1" FontFamily="Arial" FontSize="15" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
+                                <Label Grid.Row="3" Grid.Column="2" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Content="m/s"/>
+
+                                <Label Grid.Row="4" Grid.Column="0" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Content="D__desired"/>
+                                <TextBox Name="DesiredDistanceTextBox" TextChanged="DesiredDistanceTextBox_TextChanged" Grid.Row="4" Grid.Column="1" FontFamily="Arial" FontSize="15" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
+                                <Label Grid.Row="4" Grid.Column="2" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Content="m"/>
+                                
+                                <!--
+                                <Label Grid.Row="4" Grid.Column="0" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Content="D__initial__1"/>
+                                <TextBox Name="InitialDistance1TextBox" TextChanged="InitialDistance1TextBox_TextChanged" Grid.Row="4" Grid.Column="1" FontFamily="Arial" FontSize="15" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
+                                <Label Grid.Row="4" Grid.Column="2" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Content="m"/>
                             
-                            <Label Grid.Row="2" Grid.Column="0" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="D__initial__1"/>
-                            <TextBox Name="InitialDistance1TextBox" TextChanged="InitialDistance1TextBox_TextChanged" Grid.Row="2" Grid.Column="1" FontFamily="Arial" FontSize="16" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
-                            <Label Grid.Row="2" Grid.Column="2" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="m"/>
-                            
-                            <Label Grid.Row="3" Grid.Column="0" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="D__initial__2"/>
-                            <TextBox Name="InitialDistance2TextBox" TextChanged="InitialDistance2TextBox_TextChanged" Grid.Row="3" Grid.Column="1" FontFamily="Arial" FontSize="16" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
-                            <Label Grid.Row="3" Grid.Column="2" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="m"/>
-                            
-                            <Label Grid.Row="4" Grid.Column="0" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="D__desired"/>
-                            <TextBox Name="DesiredDistanceTextBox" TextChanged="DesiredDistanceTextBox_TextChanged" Grid.Row="4" Grid.Column="1" FontFamily="Arial" FontSize="16" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
-                            <Label Grid.Row="4" Grid.Column="2" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="m"/>      
-                            
-                            <Label Grid.Row="5" Grid.Column="0" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Convergence at"/>
-                            <TextBox Name="ConvergencePercentTextBox" TextChanged="ConvergencePercentTextBox_TextChanged" Grid.Row="5" Grid.Column="1" FontFamily="Arial" FontSize="16" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
-                            <Label Grid.Row="5" Grid.Column="2" FontFamily="Arial" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Content="%"/>
-                        </Grid>
+                                <Label Grid.Row="5" Grid.Column="0" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Content="D__initial__2"/>
+                                <TextBox Name="InitialDistance2TextBox" TextChanged="InitialDistance2TextBox_TextChanged" Grid.Row="5" Grid.Column="1" FontFamily="Arial" FontSize="15" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
+                                <Label Grid.Row="5" Grid.Column="2" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Content="m"/>
+                                -->
+                                
+                            </Grid>
+                        </ScrollViewer>
                     </TabItem>
-                    <TabItem Header="Fuzzy Logic" FontFamily="Arial" FontSize="18">
+                    <TabItem Header="Fuzzy Logic" FontFamily="Arial" FontSize="16">
                         <Grid VerticalAlignment="Center">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -80,13 +88,13 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <Label Grid.Row="0" FontFamily="Arial" FontSize="18" Content="Membership function type:"/>
-                            <ComboBox Name="MembershipFunctionTypeComboBox" Grid.Row="1" SelectionChanged="MembershipFunctionTypeComboBox_SelectionChanged" FontFamily="Arial" FontSize="18">
+                            <Label Grid.Row="0" FontFamily="Arial" FontSize="16" Content="Membership function type:"/>
+                            <ComboBox Name="MembershipFunctionTypeComboBox" Grid.Row="1" SelectionChanged="MembershipFunctionTypeComboBox_SelectionChanged" FontFamily="Arial" FontSize="16">
                                 
                             </ComboBox>
 
-                            <Label Grid.Row="3" FontFamily="Arial" FontSize="18" Content="Membership function type:"/>
-                            <ComboBox Name="TNormTypeComboBox" Grid.Row="4" SelectionChanged="TNormTypeComboBox_SelectionChanged" FontFamily="Arial" FontSize="18">
+                            <Label Grid.Row="3" FontFamily="Arial" FontSize="16" Content="Membership function type:"/>
+                            <ComboBox Name="TNormTypeComboBox" Grid.Row="4" SelectionChanged="TNormTypeComboBox_SelectionChanged" FontFamily="Arial" FontSize="16">
 
                             </ComboBox>
                         </Grid>

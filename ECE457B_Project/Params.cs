@@ -22,8 +22,8 @@ namespace ECE457B_Project
 		public static double brake_d2 = -10;
 		public static double brake_limit = brake_d2*2 - brake_d1;
 
-		public static double velocity_d1 = acceleration_d1;
-		public static double velocity_d2 = acceleration_d2;
+		public static double velocity_d1 = -brake_d1;
+		public static double velocity_d2 = -brake_d2;
 
 		public static double convergencePercent = 0.015;
 

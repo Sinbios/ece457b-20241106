@@ -24,6 +24,23 @@ namespace ECE457B_Project
         	Velocity = Params.vInitial;
             _index = n;
 
+            Position = 0;
+
+            for (int i = Params.NumCars - 1; i > n; i--)
+            {
+                Position += Params.dInitials[i];
+            }
+            
+            if (n == 0)
+            {
+                Distance = Params.dDesired;
+            }
+            else
+            {
+                Distance = Params.dInitials[n - 1];
+            }
+
+            /*
 			switch(n)
 			{
 				case 0:
@@ -41,6 +58,18 @@ namespace ECE457B_Project
 				default:
 					throw new Exception("Car index out of range");
 			}
+             */
+        }
+
+        public static Car[] CreateCars(int numCarsToCreate)
+        {
+            Car[] cars = new Car[Params.NumCars];
+            for (int i = 0; i < Params.NumCars; i++)
+            {
+                cars[i] = new Car(i);
+            }
+
+            return cars;
         }
     }
 }

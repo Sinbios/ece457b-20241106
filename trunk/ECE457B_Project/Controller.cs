@@ -113,34 +113,34 @@ namespace ECE457B_Project
 				var verySlowMFConst = new TrapezoidMembershipFunction(-double.MaxValue, -double.MaxValue,
 																	  Params.vDesired - Params.velocity_d2,
 																	  Params.vDesired - Params.velocity_d2);
-				var verySlowMFGauss = new NormalMembershipFunction(Params.vDesired - Params.velocity_d2, (Params.velocity_d2 - Params.velocity_d1) / 4);
+				var verySlowMFGauss = new NormalMembershipFunction(Params.vDesired - Params.velocity_d2, (Params.velocity_d2 - Params.velocity_d1) / 2);
 
 				var veryFastMFConst = new TrapezoidMembershipFunction(Params.vDesired + Params.velocity_d2, Params.vDesired + Params.velocity_d2, double.MaxValue, double.MaxValue);
-				var veryFastMFGauss = new NormalMembershipFunction(Params.vDesired + Params.velocity_d2, (Params.velocity_d2 - Params.velocity_d1) / 4);
+				var veryFastMFGauss = new NormalMembershipFunction(Params.vDesired + Params.velocity_d2, (Params.velocity_d2 - Params.velocity_d1) / 2);
 
 				AddTerm(_velocity, "Very_Slow", new CompositeMembershipFunction(MfCompositionType.Max, verySlowMFConst, verySlowMFGauss));
-				AddTerm(_velocity, "Slow", new NormalMembershipFunction(Params.vDesired - Params.velocity_d1, Params.velocity_d1 / 4));
-				AddTerm(_velocity, "Just_Right", new NormalMembershipFunction(Params.vDesired, Params.velocity_d1 / 4));
-				AddTerm(_velocity, "Fast", new NormalMembershipFunction(Params.vDesired + Params.velocity_d1, Params.velocity_d1 / 4));
+				AddTerm(_velocity, "Slow", new NormalMembershipFunction(Params.vDesired - Params.velocity_d1, Params.velocity_d1 / 2));
+				AddTerm(_velocity, "Just_Right", new NormalMembershipFunction(Params.vDesired, Params.velocity_d1 / 2));
+				AddTerm(_velocity, "Fast", new NormalMembershipFunction(Params.vDesired + Params.velocity_d1, Params.velocity_d1 / 2));
 				AddTerm(_velocity, "Very_Fast", new CompositeMembershipFunction(MfCompositionType.Max, veryFastMFConst, veryFastMFGauss));
 
 				var veryCloseMFConst = new TrapezoidMembershipFunction(-double.MaxValue, -double.MaxValue, -Params.distance_d2, -Params.distance_d2);
-				var veryCloseMFGauss = new NormalMembershipFunction(-Params.distance_d2, (Params.distance_d2 - Params.distance_d1) / 4);
+				var veryCloseMFGauss = new NormalMembershipFunction(-Params.distance_d2, (Params.distance_d2 - Params.distance_d1) / 2);
 
 				var veryFarMFConst = new TrapezoidMembershipFunction(Params.distance_d2, Params.distance_d2, double.MaxValue, double.MaxValue);
-				var veryFarMFGauss = new NormalMembershipFunction(Params.distance_d2, (Params.distance_d2 - Params.distance_d1) / 4);
+				var veryFarMFGauss = new NormalMembershipFunction(Params.distance_d2, (Params.distance_d2 - Params.distance_d1) / 2);
 
 				AddTerm(_distanceError, "Very_Close", new CompositeMembershipFunction(MfCompositionType.Max, veryCloseMFConst, veryCloseMFGauss));
-				AddTerm(_distanceError, "Close", new NormalMembershipFunction(-Params.distance_d1, Params.distance_d1 / 4));
-				AddTerm(_distanceError, "Just_Right", new NormalMembershipFunction(0, Params.distance_d1 / 4));
-				AddTerm(_distanceError, "Far", new NormalMembershipFunction(Params.distance_d1, Params.distance_d1 / 4));
+				AddTerm(_distanceError, "Close", new NormalMembershipFunction(-Params.distance_d1, Params.distance_d1 / 2));
+				AddTerm(_distanceError, "Just_Right", new NormalMembershipFunction(0, Params.distance_d1 / 2));
+				AddTerm(_distanceError, "Far", new NormalMembershipFunction(Params.distance_d1, Params.distance_d1 / 2));
 				AddTerm(_distanceError, "Very_Far", new CompositeMembershipFunction(MfCompositionType.Max, veryFarMFConst, veryFarMFGauss));
 
-				AddTerm(_acceleration, "Brake_Hard", new NormalMembershipFunction(Params.brake_d2, (Params.brake_d2 - Params.brake_d1) / 4));
-				AddTerm(_acceleration, "Brake", new NormalMembershipFunction(-Params.acceleration_d1, Params.acceleration_d1 / 4));
-				AddTerm(_acceleration, "None", new NormalMembershipFunction(0, Params.acceleration_d1 / 4));
-				AddTerm(_acceleration, "Accelerate", new NormalMembershipFunction(Params.acceleration_d1, Params.acceleration_d1 / 4));
-				AddTerm(_acceleration, "Accelerate_Hard", new NormalMembershipFunction(Params.acceleration_d2, (Params.acceleration_d2 - Params.acceleration_d1) / 4));
+				AddTerm(_acceleration, "Brake_Hard", new NormalMembershipFunction(Params.brake_d2, (Params.brake_d2 - Params.brake_d1) / 2));
+				AddTerm(_acceleration, "Brake", new NormalMembershipFunction(-Params.acceleration_d1, Params.acceleration_d1 / 2));
+				AddTerm(_acceleration, "None", new NormalMembershipFunction(0, Params.acceleration_d1 / 2));
+				AddTerm(_acceleration, "Accelerate", new NormalMembershipFunction(Params.acceleration_d1, Params.acceleration_d1 / 2));
+				AddTerm(_acceleration, "Accelerate_Hard", new NormalMembershipFunction(Params.acceleration_d2, (Params.acceleration_d2 - Params.acceleration_d1) / 2));
 			}
 			else
 			{

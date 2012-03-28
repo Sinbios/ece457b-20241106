@@ -1,4 +1,5 @@
 ﻿using AI.Fuzzy.Library;
+using System;
 
 namespace ECE457B_Project
 {
@@ -14,8 +15,8 @@ namespace ECE457B_Project
 		public static double dInitial2 = 15;
 		public static double vInitial = 0;
 
-		public static double distance_d1 { get { return dDesired / 3; } }
-		public static double distance_d2 { get { return 2 * dDesired / 3; } }
+        public static double distance_d1 { get { return dDesired / 3; } }
+        public static double distance_d2 { get { return 2 * dDesired / 3; } }
 
 		public static double acceleration_d1 = 2;
 		public static double acceleration_d2 = 6;
@@ -31,7 +32,7 @@ namespace ECE457B_Project
 		public static double convergencePercent = 0.015;
 
 		public static FunctionType functionType = FunctionType.Trapezoidal;
-		public static AndMethod tNorm = AndMethod.Production;
+		public static AndMethod tNorm = AndMethod.Min;
 	}
 
 	public enum FunctionType

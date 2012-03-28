@@ -5,14 +5,12 @@ namespace ECE457B_Project
 {
 	public static class Params
 	{
-        public static int NumCars = 6;
+        public static int NumCars = 3;
 
 		public static double timeStep = 0.03;
 		public static double vDesired = 10;
 		public static double dDesired = 5;
-        public static double[] dInitials = new double[MainWindow.MaxNumCars - 1];
-		public static double dInitial1 = 10;
-		public static double dInitial2 = 15;
+        public static double[] dInitials = new double[MainWindow.MaxNumCars];
 		public static double vInitial = 0;
 
         public static double distance_d1 { get { return dDesired / 3; } }

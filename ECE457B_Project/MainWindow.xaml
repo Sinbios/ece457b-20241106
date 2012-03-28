@@ -48,7 +48,7 @@
                                 </Grid.ColumnDefinitions>
                                 
                                 <Label FontFamily="Arial" FontSize="15" Grid.Row="0" Grid.Column="0" Content="Number of cars"/>
-                                <ComboBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" Name="NumCarComboBox" FontFamily="Arial" FontSize="15" SelectionChanged="NumCarComboBox_SelectionChanged"/>
+                                <ComboBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Name="NumCarComboBox" FontFamily="Arial" FontSize="15" SelectionChanged="NumCarComboBox_SelectionChanged"/>
                                 
                                 <Label Grid.Row="1" Grid.Column="0" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Convergence at"/>
                                 <TextBox Name="ConvergencePercentTextBox" TextChanged="ConvergencePercentTextBox_TextChanged" Grid.Row="1" Grid.Column="1" FontFamily="Arial" FontSize="15" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
@@ -64,18 +64,7 @@
 
                                 <Label Grid.Row="4" Grid.Column="0" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Content="D__desired"/>
                                 <TextBox Name="DesiredDistanceTextBox" TextChanged="DesiredDistanceTextBox_TextChanged" Grid.Row="4" Grid.Column="1" FontFamily="Arial" FontSize="15" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
-                                <Label Grid.Row="4" Grid.Column="2" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Content="m"/>
-                                
-                                <!--
-                                <Label Grid.Row="4" Grid.Column="0" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Content="D__initial__1"/>
-                                <TextBox Name="InitialDistance1TextBox" TextChanged="InitialDistance1TextBox_TextChanged" Grid.Row="4" Grid.Column="1" FontFamily="Arial" FontSize="15" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
-                                <Label Grid.Row="4" Grid.Column="2" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Content="m"/>
-                            
-                                <Label Grid.Row="5" Grid.Column="0" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Content="D__initial__2"/>
-                                <TextBox Name="InitialDistance2TextBox" TextChanged="InitialDistance2TextBox_TextChanged" Grid.Row="5" Grid.Column="1" FontFamily="Arial" FontSize="15" HorizontalAlignment="Stretch" TextAlignment="Right" VerticalAlignment="Center"/>
-                                <Label Grid.Row="5" Grid.Column="2" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Content="m"/>
-                                -->
-                                
+                                <Label Grid.Row="4" Grid.Column="2" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Center" Content="m"/>                                
                             </Grid>
                         </ScrollViewer>
                     </TabItem>
@@ -113,12 +102,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+            </Grid.RowDefinitions>            
             <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" FontFamily="Arial" FontSize="26" HorizontalAlignment="Center" VerticalAlignment="Center" Content="System Information"/>
             <Label Name="TotalSystemRuntimeLabel" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" FontFamily="Arial" FontSize="20" Height="35" HorizontalAlignment="Left" Visibility="Hidden">
                 <StackPanel Orientation="Horizontal">
@@ -127,27 +111,68 @@
                     <TextBlock Name="SystemConvergedText" FontWeight="Bold" Text=" -- system has converged" Visibility="Hidden"/>
                 </StackPanel>
             </Label>
-            <Grid Name="DistanceGraphGrid" Grid.Row="2" Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Label Name="DistanceGraphLabel" Grid.Row="1" HorizontalAlignment="Center" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Inter-car Distance (m) vs. Time (s)"/>
-            </Grid>
-            <Grid Name="VelocityGraphGrid" Grid.Row="2" Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Label Name="VelocityGraphLabel" Grid.Row="1" HorizontalAlignment="Center" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Velocity (m/s) vs. Time (s)"/>
-            </Grid>
-            <Grid Name="AccelerationGraphGrid" Grid.Row="2" Grid.Column="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Label HorizontalAlignment="Center" Grid.Row="1" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Acceleration (m/s^2) vs. Time(s)"/>
-            </Grid>
+            <TabControl Grid.Row="2">
+                <TabItem Header="System Graphs" FontFamily="Arial" FontSize="16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Name="DistanceGraphGrid" Grid.Column="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Name="DistanceGraphLabel" Grid.Row="1" HorizontalAlignment="Center" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Inter-car Distance (m) vs. Time (s)"/>
+                        </Grid>
+                        <Grid Name="VelocityGraphGrid" Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Name="VelocityGraphLabel" Grid.Row="1" HorizontalAlignment="Center" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Velocity (m/s) vs. Time (s)"/>
+                        </Grid>
+                        <Grid Name="AccelerationGraphGrid" Grid.Column="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Label HorizontalAlignment="Center" Grid.Row="1" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Acceleration (m/s^2) vs. Time(s)"/>
+                        </Grid>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Fuzzy Logic Graphs" FontFamily="Arial" FontSize="16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Name="DistanceMemFnGrid" Grid.Column="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Name="DistanceMemFnLabel" Grid.Row="1" HorizontalAlignment="Center" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Distance Membership Functions"/>
+                        </Grid>
+                        <Grid Name="VelocityMemFnGrid" Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Name="VelocityMemFnLabel" Grid.Row="1" HorizontalAlignment="Center" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Velocity Membership Functions"/>
+                        </Grid>
+                        <Grid Name="AccelerationMemFnGrid" Grid.Column="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Label HorizontalAlignment="Center" Grid.Row="1" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Acceleration Membership Functions"/>
+                        </Grid>
+                    </Grid>
+                </TabItem>
+            </TabControl>
         </Grid>
     </Grid>
 </Window>

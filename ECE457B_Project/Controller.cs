@@ -13,6 +13,8 @@ namespace ECE457B_Project
 
 		readonly MamdaniFuzzySystem _mamdani;
 
+        private static readonly double _normalBoundDistance = 2.0;
+
 		private readonly List<string> _rules = new List<string>
 		{
 		    "if (Distance is Very_Close) and (Velocity is Very_Slow) then Acceleration is Brake",
@@ -173,6 +175,123 @@ namespace ECE457B_Project
 		{
 			var output = _mamdani.Calculate(new Dictionary<FuzzyVariable, double> { { _distanceError, distanceDiff }, { _velocity, velocity } });
 			return output[_acceleration];
-		}
-	}
+        }
+
+        #region Membership Function Graphing Helpers
+
+        public int GetNumMemFns(int parameterType)
+        {
+            if (parameterType == 0)
+            {
+                return _distanceError.Terms.Count;
+            }
+            else if (parameterType == 1)
+            {
+                return _velocity.Terms.Count;
+            }
+            else
+            {
+                return _acceleration.Terms.Count;
+            }
+        }
+
+        public double[] GetMemFnValuesAt(double x, int parameterType)
+        {
+            List<double> memFnValues = new List<double>();
+
+            FuzzyVariable varToGetValuesAt;
+
+            if (parameterType == 0)
+            {
+                varToGetValuesAt = _distanceError;
+            }
+            else if (parameterType == 1)
+            {
+                varToGetValuesAt = _velocity;
+            }
+            else
+            {
+                varToGetValuesAt = _acceleration;
+            }
+
+            foreach (FuzzyTerm term in varToGetValuesAt.Terms)
+            {
+                memFnValues.Add(term.MembershipFunction.GetValue(x));
+            }
+
+            return memFnValues.ToArray();
+        }
+
+        public Tuple<double, double> GetMemFnBounds(int parameterType)
+        {
+            double lowerBound, upperBound;
+
+            FuzzyVariable varToGetValuesAt;
+
+            if (parameterType == 0)
+            {
+                varToGetValuesAt = _distanceError;
+            }
+            else if (parameterType == 1)
+            {
+                varToGetValuesAt = _velocity;
+            }
+            else
+            {
+                varToGetValuesAt = _acceleration;
+            }
+
+            IMembershipFunction lowestMemFn = varToGetValuesAt.Terms[0].MembershipFunction;
+            IMembershipFunction highestMemFn = varToGetValuesAt.Terms[varToGetValuesAt.Terms.Count - 1].MembershipFunction;
+
+            if (lowestMemFn.GetType() == typeof(CompositeMembershipFunction))
+            {
+                CompositeMembershipFunction lowerMemFnComposite = (CompositeMembershipFunction)lowestMemFn;
+                lowestMemFn = lowerMemFnComposite.MembershipFunctions[0];
+            }
+
+            lowerBound = GetBoundForMemFn(lowestMemFn, true);
+
+            if (highestMemFn.GetType() == typeof(CompositeMembershipFunction))
+            {
+                CompositeMembershipFunction highestMemFnComposite = (CompositeMembershipFunction)highestMemFn;
+                highestMemFn = highestMemFnComposite.MembershipFunctions[0];
+            }
+
+            upperBound = GetBoundForMemFn(highestMemFn, false);
+
+            return new Tuple<double, double>(lowerBound, upperBound);
+        }
+
+        private static double GetBoundForMemFn(IMembershipFunction memFn, bool isLower)
+        {
+            double bound = Double.MaxValue;
+
+            if (memFn.GetType() == typeof(TriangularMembershipFunction))
+            {
+                TriangularMembershipFunction memFnTriangular = (TriangularMembershipFunction)memFn;
+                bound = isLower ? memFnTriangular.X1 : memFnTriangular.X3;
+            }
+            else if (memFn.GetType() == typeof(TrapezoidMembershipFunction))
+            {
+                TrapezoidMembershipFunction memFnTrapezoidal = (TrapezoidMembershipFunction)memFn;
+                bound = isLower ? memFnTrapezoidal.X1 : memFnTrapezoidal.X4;
+
+                if ((isLower && bound == -Double.MaxValue) || (!isLower && bound == Double.MaxValue))
+                {
+                    bound = isLower ? memFnTrapezoidal.X3 : memFnTrapezoidal.X2;
+                }
+            }
+            else if (memFn.GetType() == typeof(NormalMembershipFunction))
+            {
+                NormalMembershipFunction memFnNormal = (NormalMembershipFunction)memFn;
+                int sign = isLower ? -1 : 1;
+                bound = memFnNormal.B + sign * (_normalBoundDistance + (_normalBoundDistance * Math.Abs(memFnNormal.Sigma)));
+            }
+
+            return bound;
+        }
+
+        #endregion
+    }
 }

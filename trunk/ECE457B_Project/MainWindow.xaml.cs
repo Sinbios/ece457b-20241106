@@ -124,6 +124,7 @@ namespace ECE457B_Project
                     initialDistanceLabel.SetCurrentValue(Grid.ColumnProperty, 0);
                     initialDistanceLabel.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
                     initialDistanceLabel.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+                    initialDistanceLabel.Height = 0;
                     initialDistanceLabel.Visibility = System.Windows.Visibility.Hidden;
                     initialDistanceLabel.Content = String.Format("D_initial_{0}", (i));
                     this.SystemParameterGrid.Children.Add(initialDistanceLabel);
@@ -137,6 +138,7 @@ namespace ECE457B_Project
                     initialDistanceTextBox.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
                     initialDistanceTextBox.TextAlignment = TextAlignment.Right;
                     initialDistanceTextBox.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+                    initialDistanceTextBox.Height = 0;
                     initialDistanceTextBox.Visibility = System.Windows.Visibility.Hidden;
                     initialDistanceTextBox.Text = String.Format("{0:0.00}", Params.dInitials[i]);
                     initialDistanceTextBox.TextChanged += new TextChangedEventHandler(InitialDistanceTextBox_TextChanged);
@@ -150,6 +152,7 @@ namespace ECE457B_Project
                     initialDistanceUnitsLabel.SetCurrentValue(Grid.ColumnProperty, 2);
                     initialDistanceUnitsLabel.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
                     initialDistanceUnitsLabel.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+                    initialDistanceUnitsLabel.Height = 0;
                     initialDistanceUnitsLabel.Visibility = System.Windows.Visibility.Hidden;
                     initialDistanceUnitsLabel.Content = "m";
                     this.SystemParameterGrid.Children.Add(initialDistanceUnitsLabel);
@@ -160,8 +163,13 @@ namespace ECE457B_Project
                     if (i < Params.NumCars)
                     {
                         initialDistanceLabel.Visibility = System.Windows.Visibility.Visible;
+                        initialDistanceLabel.Height = Double.NaN;
+
                         initialDistanceTextBox.Visibility = System.Windows.Visibility.Visible;
+                        initialDistanceTextBox.Height = Double.NaN;
+
                         initialDistanceUnitsLabel.Visibility = System.Windows.Visibility.Visible;
+                        initialDistanceUnitsLabel.Height = Double.NaN;
                     }
                 }
                 
@@ -604,10 +612,12 @@ namespace ECE457B_Project
                     if (i < Params.NumCars - 1)
                     {
                         rowControl.Visibility = System.Windows.Visibility.Visible;
+                        rowControl.Height = Double.NaN;
                     }
                     else
                     {
                         rowControl.Visibility = System.Windows.Visibility.Hidden;
+                        rowControl.Height = 0;
                     }
                 }
             }

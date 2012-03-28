@@ -8,8 +8,8 @@ namespace ECE457B_Project
         public static int NumCars = 3;
 
 		public static double timeStep = 0.03;
-		public static double vDesired = 10;
-		public static double dDesired = 5;
+		public static double vDesired = 30;
+		public static double dDesired = 10;
         public static double[] dInitials = new double[MainWindow.MaxNumCars];
 		public static double vInitial = 0;
 

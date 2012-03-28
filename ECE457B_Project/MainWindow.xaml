@@ -33,7 +33,7 @@
                 <TabControl Name="ParametersTabControl" Grid.Row="0">
                     <TabItem Header="System" FontFamily="Arial" FontSize="16">
                         <ScrollViewer>
-                            <Grid Name="SystemParameterGrid" VerticalAlignment="Center">
+                            <Grid Name="SystemParameterGrid" VerticalAlignment="Top">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>

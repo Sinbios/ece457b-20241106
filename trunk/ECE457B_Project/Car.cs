@@ -30,38 +30,11 @@ namespace ECE457B_Project
             {
                 Position += Params.dInitials[i];
             }
-            
-            if (n == 0)
-            {
-                Distance = Params.dDesired;
-            }
-            else
-            {
-                Distance = Params.dInitials[n - 1];
-            }
 
-            /*
-			switch(n)
-			{
-				case 0:
-					Distance = Params.dDesired;
-					Position = Params.dInitial1 + Params.dInitial2;
-					break;
-				case 1:
-					Distance = Params.dInitial1;
-					Position = Params.dInitial2;
-					break;
-				case 2:
-					Distance = Params.dInitial2;
-					Position = 0;
-					break;
-				default:
-					throw new Exception("Car index out of range");
-			}
-             */
+            Distance = Params.dInitials[n];
         }
 
-        public static Car[] CreateCars(int numCarsToCreate)
+        public static Car[] CreateCars()
         {
             Car[] cars = new Car[Params.NumCars];
             for (int i = 0; i < Params.NumCars; i++)

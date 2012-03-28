@@ -27,50 +27,47 @@ namespace ECE457B_Project
         private static CarSimulationControl Instance;
 
         /* Environment Dimensions */
-        private static double HeightOfRoadsideInPixels = 10;
-        private static double TreeHeightInMeters = 3.5;
-        private static double TreeWidthInMeters = (1.0 / 6) * TreeHeightInMeters;
-        private static double TreeFoliageHeightInMeters = 0.75 * TreeHeightInMeters;
-        private static double TreeFoliageWidthInMeters = (2.0 / 3) * TreeFoliageHeightInMeters;
-        private static double RoadHeightInMeters = 6.7;
-        private static double RoadLineHeightInMeters = (1.0 / 8) * RoadHeightInMeters;
-        private static double RoadLineWidthInMeters = 3 * RoadLineHeightInMeters;
+        private static readonly double HeightOfRoadsideInPixels = 10;
+        private static readonly double TreeHeightInMeters = 3.5;
+        private static readonly double TreeWidthInMeters = (1.0 / 6) * TreeHeightInMeters;
+        private static readonly double TreeFoliageHeightInMeters = 0.75 * TreeHeightInMeters;
+        private static readonly double TreeFoliageWidthInMeters = (2.0 / 3) * TreeFoliageHeightInMeters;
+        private static readonly double RoadHeightInMeters = 6.7;
+        private static readonly double RoadLineHeightInMeters = (1.0 / 8) * RoadHeightInMeters;
+        private static readonly double RoadLineWidthInMeters = 3 * RoadLineHeightInMeters;
 
         /* Car Dimensions */
-        private static double LowerCarWidthInMeters = 1.812 * RoadHeightInMeters;
-        private static double LowerCarHeightInMeters = 0.130 * LowerCarWidthInMeters;
-        private static double UpperCarHeightInMeters = LowerCarHeightInMeters;
-        private static double CarDoorWidthInMeters = 0.18 * LowerCarWidthInMeters;
-        private static double CarRearWindshieldWidthInMeters = 0.137 * LowerCarWidthInMeters;
-        private static double CarFrontWindshieldWidthInMeters = 0.172 * LowerCarWidthInMeters;
-        private static double CarDoorHandleWidthInMeters = 0.07 * LowerCarWidthInMeters;
-        private static double CarDoorHandleHeightInMeters = 0.15 * LowerCarHeightInMeters;
-        private static double CarRearLightWidthInMeters = 0.035 * LowerCarWidthInMeters;
-        private static double CarRearLightHeightInMeters = 0.55 * LowerCarHeightInMeters;
-        private static double CarFrontLightWidthInMeters = 0.055 * LowerCarWidthInMeters;
-        private static double CarFrontLightHeightInMeters = CarRearLightHeightInMeters;
-        private static double CarTireDiameterInMeters = 1.3 * LowerCarHeightInMeters;
-        private static double CarTireLineStrokeThicknessInMeters = 0.13 * CarTireDiameterInMeters;
-        private static double CarHubCapDiameterInMeters = 0.545 * CarTireDiameterInMeters;
-        private static double CarWindowStrokeThicknessInMeters = 0.2 * UpperCarHeightInMeters;
+        private static readonly double LowerCarWidthInMeters = 1.812 * RoadHeightInMeters;
+        private static readonly double LowerCarHeightInMeters = 0.130 * LowerCarWidthInMeters;
+        private static readonly double UpperCarHeightInMeters = LowerCarHeightInMeters;
+        private static readonly double CarDoorWidthInMeters = 0.18 * LowerCarWidthInMeters;
+        private static readonly double CarRearWindshieldWidthInMeters = 0.137 * LowerCarWidthInMeters;
+        private static readonly double CarFrontWindshieldWidthInMeters = 0.172 * LowerCarWidthInMeters;
+        private static readonly double CarDoorHandleWidthInMeters = 0.07 * LowerCarWidthInMeters;
+        private static readonly double CarDoorHandleHeightInMeters = 0.15 * LowerCarHeightInMeters;
+        private static readonly double CarRearLightWidthInMeters = 0.035 * LowerCarWidthInMeters;
+        private static readonly double CarRearLightHeightInMeters = 0.55 * LowerCarHeightInMeters;
+        private static readonly double CarFrontLightWidthInMeters = 0.055 * LowerCarWidthInMeters;
+        private static readonly double CarFrontLightHeightInMeters = CarRearLightHeightInMeters;
+        private static readonly double CarTireDiameterInMeters = 1.3 * LowerCarHeightInMeters;
+        private static readonly double CarTireLineStrokeThicknessInMeters = 0.13 * CarTireDiameterInMeters;
+        private static readonly double CarHubCapDiameterInMeters = 0.545 * CarTireDiameterInMeters;
+        private static readonly double CarWindowStrokeThicknessInMeters = 0.2 * UpperCarHeightInMeters;
 
         /* Car Component Positions */
-        private static double CarBackTireDistanceFromLeftEndOfCarInMeters = 0.103 * LowerCarWidthInMeters; //Distance to the left edge of the tire, NOT the center of the tire
-        private static double CarFrontTireDistanceFromLeftEndOfCarInMeters = 0.655 * LowerCarWidthInMeters; //Distance to the left edge of the tire
-        private static double CarBackDoorDistanceFromLeftEndOfCarInMeters = 0.241 * LowerCarWidthInMeters;
-        private static double CarFrontDoorDistanceFromLeftEndOfCarInMeters = CarBackDoorDistanceFromLeftEndOfCarInMeters + CarDoorWidthInMeters;
-        private static double CarDoorHandleDistanceFromLeftEndOfDoorInMeters = 0.167 * CarDoorWidthInMeters;
-        private static double CarDoorHandleDistanceFromBottomOfLowerCarInMeters = 0.7 * LowerCarHeightInMeters;
+        private static readonly double CarBackTireDistanceFromLeftEndOfCarInMeters = 0.103 * LowerCarWidthInMeters; //Distance to the left edge of the tire, NOT the center of the tire
+        private static readonly double CarFrontTireDistanceFromLeftEndOfCarInMeters = 0.655 * LowerCarWidthInMeters; //Distance to the left edge of the tire
+        private static readonly double CarBackDoorDistanceFromLeftEndOfCarInMeters = 0.241 * LowerCarWidthInMeters;
+        private static readonly double CarFrontDoorDistanceFromLeftEndOfCarInMeters = CarBackDoorDistanceFromLeftEndOfCarInMeters + CarDoorWidthInMeters;
+        private static readonly double CarDoorHandleDistanceFromLeftEndOfDoorInMeters = 0.167 * CarDoorWidthInMeters;
+        private static readonly double CarDoorHandleDistanceFromBottomOfLowerCarInMeters = 0.7 * LowerCarHeightInMeters;
 
         /* Environment Component Positions */
-        private static double DistanceBetweenRoadLinesInMeters = 12;
-        private static double DistanceBetweenTreesInMeters = 25;
-        //private static double MinimumPixelsBehindLastCar = 75;
-        private static double MinimumMetersBehindLastCar = 2 * LowerCarWidthInMeters;
-        //private static double MaximumPixelsBehindLastCar = 250;
-        private static double MaximumMetersBehindLastCar = 4 * LowerCarWidthInMeters;
-        private static double EmptyRoadLengthInFrontOfPilotCarInMeters = 2 * LowerCarWidthInMeters;
-        private static double MinEmptyRoadLengthBehindLastCarInMeters = 25;
+        private static readonly double DistanceBetweenRoadLinesInMeters = 12;
+        private static readonly double MinimumMetersBehindLastCar = 2 * LowerCarWidthInMeters;
+        private static readonly double MaximumMetersBehindLastCar = 4 * LowerCarWidthInMeters;
+        private static readonly double EmptyRoadLengthInFrontOfPilotCarInMeters = 2 * LowerCarWidthInMeters;
+        private static readonly double MinEmptyRoadLengthBehindLastCarInMeters = 25;
 
         #endregion
 
@@ -78,7 +75,6 @@ namespace ECE457B_Project
 
         private double PixelsPerMeter;
 
-        private double RightMostTreeXPos = 0; //The left part of the tree trunk
         private double RightMostRoadLineXPos = 0;
 
         private double TerrainVelocity;
@@ -135,7 +131,7 @@ namespace ECE457B_Project
 
             double distanceBetweenFirstAndLast = this.GetDistanceBetweenFirstAndLastCar(cars);
 
-            this.TotalMetersInView = (distanceBetweenFirstAndLast + (3 * LowerCarWidthInMeters) + (EmptyRoadLengthInFrontOfPilotCarInMeters) + (2 * MinEmptyRoadLengthBehindLastCarInMeters));
+            this.TotalMetersInView = (distanceBetweenFirstAndLast + (Params.NumCars * LowerCarWidthInMeters) + (EmptyRoadLengthInFrontOfPilotCarInMeters) + (2 * MinEmptyRoadLengthBehindLastCarInMeters));
 
             this.PixelsPerMeter = Instance.Width / this.TotalMetersInView;
 
@@ -150,7 +146,7 @@ namespace ECE457B_Project
 
                 if (i != cars.Length - 1)
                 {
-                    curCarFrontXPos -= (LowerCarWidthInMeters + (cars[i].Position - cars[i + 1].Position)) * PixelsPerMeter;
+                    curCarFrontXPos -= (LowerCarWidthInMeters + cars[i + 1].Distance) * PixelsPerMeter;
                 }
             }
         }  
@@ -160,7 +156,6 @@ namespace ECE457B_Project
             //If we have dipped below our minimum number of meters between first and last car
             double distanceBetweenFirstAndLast = this.GetDistanceBetweenFirstAndLastCar(cars);
 
-            //double excessSpaceBehindLastCarInPixels = this.Width - ((cars.Length * LowerCarWidthInMeters * PixelsPerMeter) + (distanceBetweenFirstAndLast * PixelsPerMeter) + (EmptyRoadLengthInFrontOfPilotCarInMeters * PixelsPerMeter));
             double excessSpaceBehindLastCarInMeters = (this.Width / PixelsPerMeter) - ((cars.Length * LowerCarWidthInMeters) + distanceBetweenFirstAndLast + EmptyRoadLengthInFrontOfPilotCarInMeters);
             if (excessSpaceBehindLastCarInMeters <= MinimumMetersBehindLastCar)
             {
@@ -236,28 +231,6 @@ namespace ECE457B_Project
 
             #endregion
 
-            /*
-            #region Update Trees
-
-            double curTreeXPosition = this.RightMostTreeXPos - (this.TerrainVelocity * Params.timeStep * PixelsPerMeter);
-
-            if (curTreeXPosition - (TreeFoliageWidthInMeters * PixelsPerMeter / 2.0) + (DistanceBetweenTreesInMeters * PixelsPerMeter) <= width)
-            {
-                curTreeXPosition += DistanceBetweenTreesInMeters * PixelsPerMeter;
-            }
-
-            this.RightMostTreeXPos = curTreeXPosition;
-
-            double treeYPosition = grassRectangle.Height - (HeightOfRoadsideInPixels / 2.0); //From bottom
-
-            while (curTreeXPosition + ((TreeFoliageWidthInMeters * PixelsPerMeter) / 2.0) >= 0)
-            {
-                this.CreateTree(curTreeXPosition, treeYPosition);
-                curTreeXPosition -= DistanceBetweenTreesInMeters * PixelsPerMeter;
-            }
-
-            #endregion
-            */
             #region Update Road Lines
 
             double curRoadLineXPosition = this.RightMostRoadLineXPos - (this.TerrainVelocity * Params.timeStep * PixelsPerMeter);
@@ -282,18 +255,7 @@ namespace ECE457B_Project
 
             #region Update Cars
 
-            //Thread createCarElements = new Thread(new ParameterizedThreadStart(this.CreateCars));
-            //createCarElements.SetApartmentState(ApartmentState.STA);
-            //createCarElements.Start(new Tuple<double, double, Car[]>(this.Width, this.Height, cars));
-
-            //createCarElements.Join();
-
             this.CreateCars(new Tuple<double, double, Car[]>(this.Width, this.Height, cars));
-
-            //foreach (UIElement carElement in this.CarElementsToDraw)
-            //{
-            //    this.DrawingCanvas.Children.Add(carElement);
-            //}
 
             #endregion
         }
@@ -301,8 +263,6 @@ namespace ECE457B_Project
         private void CreateCars(object dataObj)
         {
             Tuple<double, double, Car[]> data = (Tuple<double, double, Car[]>)dataObj;
-
-            //List<UIElement> carElementsToDraw = new List<UIElement>();
 
             double curCarFrontXPos = data.Item1 - (EmptyRoadLengthInFrontOfPilotCarInMeters * PixelsPerMeter);
             for (int i = 0; i < data.Item3.Length; i++)
@@ -314,11 +274,6 @@ namespace ECE457B_Project
                     curCarFrontXPos -= (LowerCarWidthInMeters + (data.Item3[i].Position - data.Item3[i + 1].Position)) * PixelsPerMeter;
                 }
             }
-
-            //lock (this)
-            //{
-                //this.CarElementsToDraw = carElementsToDraw;
-            //}
         }
 
         private void CreateBackground()
@@ -348,20 +303,6 @@ namespace ECE457B_Project
             roadRectangle.Height = RoadHeightInMeters * PixelsPerMeter;
             roadRectangle.SetCurrentValue(Canvas.TopProperty, this.Height - grassRectangle.Height + HeightOfRoadsideInPixels);
             this.DrawingCanvas.Children.Add(roadRectangle);
-
-            /*
-            double curTreeXPosition = this.Width - ((DistanceBetweenTreesInMeters * 0.5) * PixelsPerMeter); //From left
-            this.RightMostTreeXPos = curTreeXPosition;
-
-            double treeYPosition = grassRectangle.Height - (HeightOfRoadsideInPixels / 2.0); //From bottom
-
-            while (curTreeXPosition + ((TreeFoliageWidthInMeters * PixelsPerMeter) / 2.0) > 0)
-            {
-                this.CreateTree(curTreeXPosition, treeYPosition);
-
-                curTreeXPosition -= DistanceBetweenTreesInMeters * PixelsPerMeter;
-            }
-             */
 
             double curRoadLineXPosition = this.Width - ((DistanceBetweenRoadLinesInMeters * 0.5) * PixelsPerMeter); //From left
             this.RightMostRoadLineXPos = curRoadLineXPosition;
@@ -472,8 +413,7 @@ namespace ECE457B_Project
             else
             {
                 this.DrawingCanvas.Children.Add(backTire);
-            }
-            
+            }            
 
             Ellipse backTireHubCap = new Ellipse();
             backTireHubCap.Stroke = Brushes.Black;
@@ -711,12 +651,10 @@ namespace ECE457B_Project
         {
             double distanceBetweenFirstAndLast = 0;
 
-            for (int i = 0; i < cars.Length; i++)
+            for (int i = cars.Length - 1; i > 0; i--)
             {
-                if (i != cars.Length - 1)
-                {
-                    distanceBetweenFirstAndLast += cars[i].Position - cars[i + 1].Position;
-                }
+
+                distanceBetweenFirstAndLast += cars[i].Distance;
             }
 
             return distanceBetweenFirstAndLast;

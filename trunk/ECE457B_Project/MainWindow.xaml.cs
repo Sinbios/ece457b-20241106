@@ -503,6 +503,8 @@ namespace ECE457B_Project
                 SimulationThread.Join();
             }
 
+            Controller.GetInstance().Reset();
+
             this.NumCarComboBox.IsEnabled = true;
             foreach (Control[] controls in this.InitialDistanceParameterEntryRows)
             {
@@ -518,7 +520,10 @@ namespace ECE457B_Project
 
             this.ClearPointSources();
 
-            CarSimulationControl.GetInstance().InitializeVisualization(Car.CreateCars());
+            Dispatcher.Invoke((Action)delegate
+            {
+                CarSimulationControl.GetInstance().InitializeVisualization(Car.CreateCars());
+            });
         }
 
         void InitialDistanceTextBox_TextChanged(object sender, TextChangedEventArgs e)

@@ -66,6 +66,13 @@ namespace ECE457B_Project
 
         #endregion
 
+        #region Member Variables
+
+        private CarSimulationControl CarSimulationControlInstance = null;
+
+        #endregion
+
+
         #region Constructor
 
         public MainWindow()
@@ -75,19 +82,24 @@ namespace ECE457B_Project
             Controller.GetInstance().Reset();
 
             this.WindowState = System.Windows.WindowState.Maximized;
-            this.ResizeMode = System.Windows.ResizeMode.NoResize;
+            this.ResizeMode = System.Windows.ResizeMode.CanResize;
             this.Width = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width;
-            this.Height = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height;
-
+            this.MinWidth = 640;
+            this.Height = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height - 20;
+            this.MinHeight = 600;
+            this.SizeChanged += new SizeChangedEventHandler(MainWindow_SizeChanged);
+            
             this.SimulationInfoRow.Height = new GridLength((this.Height - this.TitleRow.Height.Value) * (4.5 / 8));
             this.SimulationPerformanceRow.Height = new GridLength(this.Height - this.SimulationInfoRow.Height.Value - this.TitleRow.Height.Value);
 
             this.SystemVisualizationColumn.Width = new GridLength(this.Width - this.ParameterColumn.Width.Value);
 
-            CarSimulationControl carSimInstance = CarSimulationControl.CreateInstance(this.SystemVisualizationColumn.Width.Value, this.SimulationPerformanceRow.Height.Value);
-            carSimInstance.SetCurrentValue(Grid.ColumnProperty, 1);
-            carSimInstance.SetCurrentValue(Grid.RowProperty, 1);
-            this.SimulationParameterAndVisualiationGrid.Children.Add(carSimInstance);
+            this.CarSimulationControlInstance = CarSimulationControl.CreateInstance(this.SystemVisualizationColumn.Width.Value, this.SimulationPerformanceRow.Height.Value);
+            this.CarSimulationControlInstance.SetCurrentValue(Grid.ColumnProperty, 1);
+            this.CarSimulationControlInstance.SetCurrentValue(Grid.RowProperty, 1);
+            this.CarSimulationControlInstance.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+            this.CarSimulationControlInstance.VerticalAlignment = System.Windows.VerticalAlignment.Top;
+            this.SimulationParameterAndVisualiationGrid.Children.Add(this.CarSimulationControlInstance);
 
             //Add parameter setters and combo box items for all cars
             List<ComboBoxItem> carNumComboBoxItems = new List<ComboBoxItem>();
@@ -579,6 +591,37 @@ namespace ECE457B_Project
             else
             {
                 this.InitialVelocityTextBox.Foreground = Brushes.Red;
+            }
+        }
+
+        private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Console.WriteLine("Current height is: {0}", this.Height);
+            if (e.PreviousSize.Width != 0 && e.WidthChanged)
+            {
+                double sizeChange = e.PreviousSize.Width - e.NewSize.Width;
+
+                this.CarSimulationControlInstance.Width -= sizeChange;
+                this.SystemVisualizationColumn.Width = new GridLength(this.SystemVisualizationColumn.Width.Value - sizeChange);
+
+                if (SimulationThread == null || !SimulationThread.IsAlive)
+                {
+                    this.CarSimulationControlInstance.InitializeVisualization(Car.CreateCars());
+                }
+            }
+
+            if (e.PreviousSize.Height != 0 && e.HeightChanged)
+            {
+                double sizeChange = e.PreviousSize.Height - e.NewSize.Height;
+
+                this.SimulationPerformanceRow.Height = new GridLength(this.SimulationPerformanceRow.Height.Value - (sizeChange / 2.0));
+                this.SimulationInfoRow.Height = new GridLength(this.SimulationInfoRow.Height.Value - (sizeChange / 2.0));
+                this.CarSimulationControlInstance.Height = this.SimulationPerformanceRow.Height.Value;
+
+                if (SimulationThread == null || !SimulationThread.IsAlive)
+                {
+                    this.CarSimulationControlInstance.InitializeVisualization(Car.CreateCars());
+                }
             }
         }
 

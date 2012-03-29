@@ -5,14 +5,14 @@
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded"
         Closing="Window_Closing"
-        Title="MainWindow" Height="800" Width="1280">
+        Title="MainWindow" Height="600" Width="1280">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Name="TitleRow" Height="55"/>
             <RowDefinition Name="SimulationPerformanceRow" Height="Auto"/>
             <RowDefinition Name="SimulationInfoRow" Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label Name="TitleLabel" Grid.Row="0" FontFamily="Arial" FontSize="38" HorizontalAlignment="Center" FontWeight="Bold" Content="Autonomous Car Platoon Simulation"/>
+        <Label Name="TitleLabel" Grid.Row="0" FontFamily="Arial" FontSize="34" HorizontalAlignment="Center" FontWeight="Bold" Content="Autonomous Car Platoon Simulation"/>
         <Grid Name="SimulationParameterAndVisualiationGrid" Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -124,21 +124,21 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <Label Name="DistanceGraphLabel" Grid.Row="1" HorizontalAlignment="Center" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Inter-car Distance (m) vs. Time (s)"/>
+                            <Label Name="DistanceGraphLabel" Grid.Row="1" HorizontalAlignment="Center" FontFamily="Arial" FontSize="18" Height="35" Content="Distance vs. Time"/>
                         </Grid>
                         <Grid Name="VelocityGraphGrid" Grid.Column="1">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <Label Name="VelocityGraphLabel" Grid.Row="1" HorizontalAlignment="Center" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Velocity (m/s) vs. Time (s)"/>
+                            <Label Name="VelocityGraphLabel" Grid.Row="1" HorizontalAlignment="Center" FontFamily="Arial" FontSize="18" Height="35" Content="Velocity vs. Time"/>
                         </Grid>
                         <Grid Name="AccelerationGraphGrid" Grid.Column="2">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <Label HorizontalAlignment="Center" Grid.Row="1" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Acceleration (m/s^2) vs. Time(s)"/>
+                            <Label HorizontalAlignment="Center" Grid.Row="1" FontFamily="Arial" FontSize="18" Height="35" Content="Acceleration vs. Time"/>
                         </Grid>
                     </Grid>
                 </TabItem>
@@ -154,21 +154,21 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <Label Name="DistanceMemFnLabel" Grid.Row="1" HorizontalAlignment="Center" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Distance Membership Functions"/>
+                            <Label Name="DistanceMemFnLabel" Grid.Row="1" HorizontalAlignment="Center" FontFamily="Arial" FontSize="18" Height="35" Content="Distance"/>
                         </Grid>
                         <Grid Name="VelocityMemFnGrid" Grid.Column="1">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <Label Name="VelocityMemFnLabel" Grid.Row="1" HorizontalAlignment="Center" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Velocity Membership Functions"/>
+                            <Label Name="VelocityMemFnLabel" Grid.Row="1" HorizontalAlignment="Center" FontFamily="Arial" FontSize="18" Height="35" Content="Velocity"/>
                         </Grid>
                         <Grid Name="AccelerationMemFnGrid" Grid.Column="2">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <Label HorizontalAlignment="Center" Grid.Row="1" FontFamily="Arial" FontSize="20" Height="35" Content="Graph of Acceleration Membership Functions"/>
+                            <Label HorizontalAlignment="Center" Grid.Row="1" FontFamily="Arial" FontSize="18" Height="35" Content="Acceleration"/>
                         </Grid>
                     </Grid>
                 </TabItem>

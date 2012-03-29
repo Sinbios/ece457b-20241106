@@ -463,7 +463,7 @@ namespace ECE457B_Project
                     this.DesiredVelocityTextBox.Foreground = Brushes.Black;
                     Params.vDesired = newDesiredVelocity;
 
-                    if (SimulationThread == null || !SimulationThread.IsAlive)
+                    if (SimulationThread == null || !SimulationThread.IsAlive || (SimulationThread != null && SimulationThread.IsAlive && PauseSimulation))
                     {
                         Controller.GetInstance().Reset();
                         this.UpdateMemFnPoints();
@@ -494,7 +494,7 @@ namespace ECE457B_Project
                     this.DesiredDistanceTextBox.Foreground = Brushes.Black;
                     Params.dDesired = newDesiredDistance;
 
-                    if (SimulationThread == null || !SimulationThread.IsAlive)
+                    if (SimulationThread == null || !SimulationThread.IsAlive || (SimulationThread != null && SimulationThread.IsAlive && PauseSimulation))
                     {
                         Controller.GetInstance().Reset();
                         this.UpdateMemFnPoints();
@@ -629,7 +629,7 @@ namespace ECE457B_Project
         {
             Params.functionType = (FunctionType)Enum.Parse(typeof(FunctionType), (string)(((ComboBoxItem)this.MembershipFunctionTypeComboBox.SelectedItem).Content));
 
-            if (SimulationThread == null || !SimulationThread.IsAlive)
+            if (SimulationThread == null || !SimulationThread.IsAlive || (SimulationThread != null && SimulationThread.IsAlive && PauseSimulation))
             {
                 Controller.GetInstance().Reset();
                 this.UpdateMemFnPoints();

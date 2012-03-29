@@ -8,8 +8,8 @@ namespace ECE457B_Project
         public static int NumCars = 3;
 
 		public static double timeStep = 0.03;
-		public static double vDesired = 30;
-		public static double dDesired = 10;
+		public static double vDesired = 10;
+		public static double dDesired = 5;
         public static double[] dInitials = new double[MainWindow.MaxNumCars];
 		public static double vInitial = 0;
 
@@ -27,7 +27,7 @@ namespace ECE457B_Project
 		public static double velocity_d1 = -brake_d1;
 		public static double velocity_d2 = -brake_d2;
 
-		public static double convergencePercent = 0.015;
+		public static double convergencePercent = 0.02;
 
 		public static FunctionType functionType = FunctionType.Trapezoidal;
 		public static AndMethod tNorm = AndMethod.Min;
